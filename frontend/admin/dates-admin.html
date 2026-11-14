@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/admin.css"><title>Exam dates & fees | UKA Admin</title></head><body>
+<script src="/js/api.js"></script><script src="/js/admin.js"></script>
+<script>
+(async()=>{const u=await adminInit('exam-dates-admin','Exam dates & fees',true);if(!u)return;const c=document.getElementById('c');let list=[],editId=null;
+c.innerHTML=`<div class="tb"><b style="font-size:18px">Exam dates</b><button class="b red" id="ad" style="margin-left:auto">+ Add exam date</button></div>
+<div class="box"><table><thead><tr><th>Exam date</th><th>Test</th><th>Mode</th><th>Venue</th><th>Apply by</th><th>Fee</th><th>Seats</th><th>Status</th><th></th></tr></thead><tbody id="td"></tbody></table></div>
+<div class="tb" style="margin-top:28px"><b style="font-size:18px">Fees</b><button class="b red" id="af" style="margin-left:auto">+ Add fee</button></div>
+<div class="box"><table><thead><tr><th>Test</th><th>Fee</th><th>Note</th><th>Status</th><th></th></tr></thead><tbody id="tf"></tbody></table></div>
+<dialog id="dg"><div class="dialog-head"><h2 id="dt"></h2><button type="button" class="dialog-close-btn" onclick="document.getElementById('dg').close()" title="Close">×</button></div><form id="fm"><input type="hidden" name="kind">
+<div class="cols"><label class="f">Test name<input name="testType" required maxlength="120" placeholder="IELTS Academic"></label><label class="f">Fee (৳)<input name="fee" type="number" min="0" value="0"></label>
+<label class="f d">Exam date<input name="examDate" type="date"></label><label class="f d">Apply by (deadline)<input name="deadline" type="date"></label>
+<label class="f d">Mode<select name="mode"><option value="">—</option><option>Paper-based</option><option>Computer-delivered</option></select></label><label class="f d">Venue<input name="venue" maxlength="150"></label>
+<label class="f d">Seats<input name="seats" type="number" min="0"></label><label class="f">Order<input name="order" type="number" value="0"></label></div>
+<label class="f">Note<input name="note" maxlength="300"></label>
+<label class="f"><input type="checkbox" name="isActive" checked> Show on website</label>
+<div class="tb"><button class="b red" id="sv">Save</button><button type="button" class="b" id="cn">Cancel</button></div></form></dialog>`;
+const $=id=>document.getElementById(id),dg=$('dg'),fm=$('fm');
+const ymd=v=>v?String(v).slice(0,10):'';
+const fd=v=>v?new Date(v).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}):'—';
+const today=new Date(new Date().toDateString());
+const btn=x=>`<button class="b" data-e="${x._id}">Edit</button> <button class="b del" data-d="${x._id}">Delete</button>`;
+const st=x=>{const past=x.kind=='date'&&new Date(x.examDate)<today;return `<span class="tag ${x.isActive&&!past?'on':'off'}">${past?'Past':x.isActive?'Visible':'Hidden'}</span>`};
+const draw=()=>{const D=list.filter(x=>x.kind=='date'),F=list.filter(x=>x.kind=='fee');
+$('td').innerHTML=D.map(x=>`<tr><td><b>${fd(x.examDate)}</b></td><td>${esc(x.testType)}</td><td>${esc(x.mode||'—')}</td><td>${esc(x.venue||'—')}</td><td>${fd(x.deadline)}</td><td>${taka(x.fee)}</td><td>${x.seats??'—'}</td><td>${st(x)}</td><td>${btn(x)}</td></tr>`).join('')||'<tr><td colspan="9">No exam dates yet.</td></tr>';
+$('tf').innerHTML=F.map(x=>`<tr><td><b>${esc(x.testType)}</b></td><td>${taka(x.fee)}</td><td>${esc(x.note||'—')}</td><td>${st(x)}</td><td>${btn(x)}</td></tr>`).join('')||'<tr><td colspan="5">No fees yet.</td></tr>'};
+const load=async()=>{try{list=await api('/exam-dates/admin/all');draw()}catch(e){toast(e.message,1)}};
+const open=(k,x)=>{editId=x?x._id:null;fm.reset();fm.kind.value=k;$('dt').textContent=(x?'Edit ':'Add ')+(k=='date'?'exam date':'fee');
+document.querySelectorAll('.d').forEach(e=>e.style.display=k=='date'?'':'none');fm.examDate.required=k=='date';
+if(x){for(const f of ['testType','fee','mode','venue','seats','order','note'])fm[f].value=x[f]??'';fm.examDate.value=ymd(x.examDate);fm.deadline.value=ymd(x.deadline);fm.isActive.checked=!!x.isActive}dg.showModal()};
+$('ad').onclick=()=>open('date');$('af').onclick=()=>open('fee');$('cn').onclick=()=>dg.close();
+c.onclick=async e=>{const b=e.target.closest('button');if(!b)return;
+if(b.dataset.e){const x=list.find(i=>i._id==b.dataset.e);return open(x.kind,x)}
+if(b.dataset.d){if(!confirm('Delete this row?'))return;try{await api('/exam-dates/'+b.dataset.d,{method:'DELETE'});toast('Deleted');load()}catch(er){toast(er.message,1)}}};
+fm.onsubmit=async e=>{e.preventDefault();const k=fm.kind.value,b={kind:k,testType:fm.testType.value.trim(),fee:+fm.fee.value||0,order:+fm.order.value||0,note:fm.note.value.trim(),isActive:fm.isActive.checked};
+if(k=='date'){b.examDate=fm.examDate.value;b.deadline=fm.deadline.value;b.mode=fm.mode.value;b.venue=fm.venue.value.trim();b.seats=fm.seats.value===''?null:+fm.seats.value}
+$('sv').disabled=true;try{await api(editId?'/exam-dates/'+editId:'/exam-dates',{method:editId?'PUT':'POST',body:b});dg.close();toast('Saved');load()}catch(er){toast(er.message,1)}$('sv').disabled=false};
+load()})();
+</script></body></html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Online Admission & Seat Reservation | UKA Technical Institute</title>
+  <meta name="description" content="Apply online for IELTS, Spoken English, Junior Spoken, and Cambridge test preparation at UKA Technical Institute Banasree, Dhaka.">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* Kinetic Hero with Moving Objects */
+    .adm-hero{position:relative;background:linear-gradient(135deg,#050b1d 0%,#0b2a6f 60%,#17264f 100%);color:#fff;padding:clamp(60px,8vw,110px) 0 clamp(70px,8vw,100px);overflow:hidden}
+    
+    /* Floating Objects with CSS Animation & Parallax */
+    .hero-scene{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+    
+    .float-obj{position:absolute;display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:24px;background:rgba(255,255,255,.12);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.24);color:#fff;font-weight:700;font-size:13.5px;box-shadow:0 20px 45px rgba(0,0,0,.25);will-change:transform;transition:transform .2s cubic-bezier(.25,.46,.45,.94)}
+    .float-obj span.icon{font-size:24px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+    .float-obj b{color:#fff;display:block;font-size:14px}
+    .float-obj small{color:#c9d5fb;font-size:11.5px;font-weight:600}
+    
+    .obj-1{top:18%;right:10%;animation:drift-1 7s ease-in-out infinite alternate}
+    .obj-2{bottom:22%;right:15%;animation:drift-2 8.5s ease-in-out infinite alternate}
+    .obj-3{top:30%;left:5%;animation:drift-3 9s ease-in-out infinite alternate}
+    .obj-4{bottom:15%;left:8%;animation:drift-4 7.5s ease-in-out infinite alternate}
+
+    @keyframes drift-1{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-24px,-30px) rotate(3deg)}}
+    @keyframes drift-2{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(25px,-25px) rotate(-4deg)}}
+    @keyframes drift-3{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(20px,28px) rotate(2deg)}}
+    @keyframes drift-4{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-22px,24px) rotate(-3deg)}}
+
+    /* Ambient Glowing Orbs */
+    .glow-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45;pointer-events:none;will-change:transform}
+    .orb-red{width:360px;height:360px;background:radial-gradient(circle,var(--red) 0%,transparent 70%);top:-80px;right:-40px;animation:pulse-orb 9s ease-in-out infinite alternate}
+    .orb-blue{width:450px;height:450px;background:radial-gradient(circle,#2b5bf4 0%,transparent 70%);bottom:-120px;left:-60px;animation:pulse-orb 11s ease-in-out infinite alternate-reverse}
+    @keyframes pulse-orb{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.25) translate(30px,20px)}}
+
+    /* Responsive Two-Column Layout */
+    .adm-layout{display:grid;grid-template-columns:1fr 1.25fr;gap:40px;align-items:start;margin:20px 0 60px}
+    @media(max-width:960px){.adm-layout{grid-template-columns:1fr}}
+
+    /* Form Container */
+    .adm-card{background:#fff;border:1.5px solid var(--line);border-radius:32px;padding:clamp(26px,4vw,44px);box-shadow:0 24px 60px rgba(11,42,111,.1);position:relative;overflow:hidden;transition:box-shadow .3s}
+    .adm-card:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--red),var(--blue))}
+    .adm-card:hover{box-shadow:0 32px 70px rgba(11,42,111,.14)}
+
+    /* Step Timeline in Left Column */
+    .adm-steps{display:grid;gap:18px;margin:28px 0}
+    .adm-step-item{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:18px 20px;transition:all .3s var(--e)}
+    .adm-step-item:hover{transform:translateX(6px);border-color:var(--navy);box-shadow:0 12px 30px rgba(11,42,111,.08)}
+    .adm-step-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;font:800 15px/36px 'Bricolage Grotesque';text-align:center;flex-shrink:0;box-shadow:0 6px 14px rgba(11,42,111,.2)}
+    .adm-step-content h4{font-size:16px;color:var(--navy);margin:0 0 4px}
+    .adm-step-content p{font-size:13px;color:var(--mut);line-height:1.5;margin:0}
+
+    /* Course Perk Callout */
+    .perk-box{background:linear-gradient(135deg,#0b2a6f,#1a47b5);color:#fff;border-radius:24px;padding:26px;margin-top:24px;box-shadow:0 16px 40px rgba(11,42,111,.15);position:relative;overflow:hidden}
+    .perk-box:after{content:"";position:absolute;right:-20px;bottom:-20px;width:120px;height:120px;background:radial-gradient(circle,rgba(225,29,58,.4),transparent 70%);border-radius:50%}
+
+    /* Step Pills on Top of Form */
+    .form-pills{display:flex;gap:8px;margin-bottom:24px}
+    .form-pill{flex:1;height:5px;background:#e2e8f0;border-radius:4px;overflow:hidden;position:relative}
+    .form-pill.done{background:var(--red)}
+    .form-pill.active{background:var(--navy)}
+
+    /* Success Confetti Animation Box */
+    .success-celebrate{display:none;text-align:center;padding:40px 20px}
+    .success-celebrate.show{display:block;animation:cin-fadeup .6s var(--e) forwards}
+    .success-badge{width:80px;height:80px;background:#ecfdf3;border:2px solid #b7ebcc;border-radius:50%;display:grid;place-items:center;font-size:40px;margin:0 auto 20px;box-shadow:0 12px 30px rgba(11,107,58,.15)}
+  </style>
+</head>
+<body>
+  <header id="nav"><div class="w"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><ul class="menu" id="menu"><li class="mh"><div class="mhi"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><button class="mx" aria-label="Close menu">×</button></div></li><li class="has" style="--i:0"><a href="/ielts-exam">IELTS Exam</a><ul class="dd"><li class="va"><a href="/ielts-exam">View all IELTS Exam →</a></li><li><a href="/ielts-exam">About IELTS</a></li><li><a href="/ielts-academic">IELTS Academic</a></li><li><a href="/ielts-general">IELTS General Training</a></li><li><a href="/exam-dates">Exam Dates &amp; Fees</a></li><li><a href="/book-exam">Book Your Exam</a></li></ul></li><li class="has" style="--i:1"><a href="/mock-test">Mock Test</a><ul class="dd"><li class="va"><a href="/mock-test">View all Mock Test →</a></li><li><a href="/mock-test?type=full">IELTS FULL MOCK TEST</a></li><li><a href="/mock-test?type=reading">IELTS READING MOCK</a></li><li><a href="/mock-test?type=writing">IELTS WRITING MOCK</a></li><li><a href="/mock-test?type=speaking">IELTS SPEAKING MOCK</a></li></ul></li><li class="has" style="--i:2"><a href="/courses">Our Courses</a><ul class="dd"><li class="va"><a href="/courses">View all Our Courses →</a></li><li><a href="/courses">All Courses</a></li><li><a href="/courses#ielts-preparation">IELTS Preparation</a></li><li><a href="/courses#spoken-adult">Spoken English (Adult)</a></li><li><a href="/courses#junior-spoken">Junior Spoken English</a></li><li><a href="/set">Secondary English Test (SET)</a></li><li><a href="/pet">Primary English Test (PET)</a></li><li><a href="/study-abroad">Study Abroad Consultation</a></li><li><a href="/admission">Apply for Admission</a></li></ul></li><li class="has" style="--i:3"><a href="/about">About Us</a><ul class="dd"><li class="va"><a href="/about">View all About Us →</a></li><li><a href="/our-story">Our Story</a></li><li><a href="/our-chairman">Our Chairman</a></li><li><a href="/branches">Our Branches</a></li><li><a href="/our-team">Our Team</a></li><li><a href="/career">Career Opportunities</a></li><li><a href="/gallery">Photo Gallery</a></li><li><a href="/faq">FAQ</a></li></ul></li><li style="--i:4"><a href="/contact">Contact Us</a></li><li class="mf"><div class="mfi"><a class="s" href="/book-exam" style="grid-column:span 2">Book IELTS Exam</a><a class="wa2" href="https://wa.me/8801516579760?text=Hello%20UKA%20Technical%20Institute%2C%20I%20want%20to%20know%20more." target="_blank" rel="noopener">Chat on WhatsApp</a></div></li></ul><div class="auth"><a class="s" href="/book-exam" style="background:linear-gradient(135deg,var(--red),var(--red2));border-color:var(--red);color:#fff">Book Exam</a></div><button class="bg" id="bg" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div><div id="ov"></div></header>
+
+
+<section class="adm-hero" id="heroWrap">
+  <!-- Glowing Ambient Light Spheres -->
+  <div class="glow-orb orb-red" id="orbRed"></div>
+  <div class="glow-orb orb-blue" id="orbBlue"></div>
+
+  <!-- Interactive Floating Objects Scene -->
+  <div class="hero-scene" id="sceneWrap">
+    <div class="float-obj obj-1" data-depth="0.08">
+      <span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+      <div>
+        <b>Band 8.0+ Target</b>
+        <small>Guaranteed Diagnostic Pathway</small>
+      </div>
+    </div>
+    
+    <div class="float-obj obj-2" data-depth="0.14">
+      <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      <div>
+        <b>British Council Lab</b>
+        <small>Computer-Delivered Testing Suite</small>
+      </div>
+    </div>
+    
+    <div class="float-obj obj-3" data-depth="0.06">
+      <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+      <div>
+        <b>5 Free Full Mocks</b>
+        <small>Official Testing Software</small>
+      </div>
+    </div>
+    
+    <div class="float-obj obj-4" data-depth="0.11">
+      <span class="icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+      <div>
+        <b>Instant Callback</b>
+        <small>Dedicated Academic Counselor</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="w" style="position:relative;z-index:2">
+    <div class="crumb"><a href="/">Home</a> / <span>Online Admission</span></div>
+    <div class="badge-pill"><b></b>Live Admissions Desk · Academic Session 2026</div>
+    <h1>
+      <span><i style="--d:0">Reserve Your Batch Seat:</i></span>
+      <span><i style="--d:1">Online Admission Desk</i></span>
+    </h1>
+    <p>Take the first step toward your global education and career dreams. Apply online in just 60 seconds — our admissions team will confirm your batch timing, diagnostic assessment, and enrollment offer.</p>
+  </div>
+</section>
+
+<!-- Sleek Straight Cinematic Ribbon -->
+<div class="cin-mq">
+  <div class="tr">
+    <span>Direct Batch Enrolment & Seat Reservation<em></em></span>
+    <span>Free Diagnostic English Level Test<em></em></span>
+    <span>Official British Council Curriculum & Software<em></em></span>
+    <span>Flexible Morning, Evening & Weekend Batches<em></em></span>
+    <span>Small Interactive Batches (Max 12-15 Students)<em></em></span>
+    <span>100% Computer Practice Lab Included<em></em></span>
+  </div>
+</div>
+
+<main class="sec">
+  <div class="w">
+    <div class="adm-layout">
+      <!-- Left Column: Guidance, Steps & Perks -->
+      <div>
+        <span class="badge" style="background:rgba(11,42,111,.08);color:var(--navy);font-weight:800;font-size:12px;text-transform:uppercase">How Admission Works</span>
+        <h2 style="font-size:30px;color:var(--navy);margin:10px 0 6px">Simple 3-Step Enrollment</h2>
+        <p style="color:var(--mut);font-size:15px;line-height:1.6">No upfront paperwork needed. Reserve your slot now and finalize batch schedules after speaking with an academic advisor.</p>
+
+        <div class="adm-steps">
+          <div class="adm-step-item">
+            <div class="adm-step-num">1</div>
+            <div class="adm-step-content">
+              <h4>Choose Course & Submit Details</h4>
+              <p>Select your desired IELTS, Spoken English, or Test module and provide your phone/WhatsApp number.</p>
+            </div>
+          </div>
+
+          <div class="adm-step-item">
+            <div class="adm-step-num">2</div>
+            <div class="adm-step-content">
+              <h4>Personal Diagnostic Call (Within 24h)</h4>
+              <p>Our senior advisor conducts a 5-minute preliminary assessment to recommend the most optimal batch and level.</p>
+            </div>
+          </div>
+
+          <div class="adm-step-item">
+            <div class="adm-step-num">3</div>
+            <div class="adm-step-content">
+              <h4>Receive Orientation & Lab Pass</h4>
+              <p>Complete batch confirmation, collect official course materials, and gain instant access to our computer practice lab.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Complimentary Student Privileges Box -->
+        <div class="perk-box">
+          <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#ff8a9a;margin-bottom:6px">Student Privileges</div>
+          <h3 style="font-size:22px;color:#fff;margin:0 0 10px">What You Receive Upon Enrollment</h3>
+          <ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px;font-size:14px;line-height:1.55;color:#e2e8f0">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> <b>5 Full-Length Computer Mock Tests FREE</b> (Official BC Software)</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> <b>1 Month Full Exam Lab Facility FREE</b> before your actual test</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> <b>Complete Cambridge & British Council Course Pack</b></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> <b>1-on-1 Speaking Mock & Native Pronunciation Debriefs</b></li>
+          </ul>
+        </div>
+
+        <!-- Student Trust Counter -->
+        <div style="display:flex;align-items:center;gap:16px;margin-top:24px;padding:16px;background:#fff;border:1.5px solid var(--line);border-radius:20px">
+          <div style="font:800 28px 'Bricolage Grotesque';color:var(--navy)">12,000+</div>
+          <div style="font-size:13.5px;color:var(--mut);line-height:1.4">Successful students trained & certified across our campuses.</div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Admission Form -->
+      <div class="adm-card">
+        <!-- Top Step Indicator -->
+        <div class="form-pills">
+          <div class="form-pill done"></div>
+          <div class="form-pill active"></div>
+          <div class="form-pill"></div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-celebrate" id="successBox">
+          <div class="success-badge" style="font-size:28px;color:#16a34a">✓</div>
+          <h3 style="font-size:26px;color:var(--navy);margin:0 0 8px">Admission Request Confirmed!</h3>
+          <p style="color:var(--mut);font-size:15px;line-height:1.6;max-width:500px;margin:0 auto 24px">
+            Thank you for applying to UKA Technical Institute. Your application ticket has been assigned to our admissions desk. An academic counselor will contact you via phone / WhatsApp shortly.
+          </p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <a class="btn red" href="/">Back to Home</a>
+            <a class="btn ln" href="https://wa.me/8801516579760" target="_blank" rel="noopener">Connect on WhatsApp Now</a>
+          </div>
+        </div>
+
+        <!-- The Application Form -->
+        <form id="admForm" novalidate>
+          <div style="margin-bottom:20px">
+            <h3 style="font-size:24px;color:var(--navy);margin:0 0 4px">Online Seat Application</h3>
+            <p style="font-size:14px;color:var(--mut);margin:0">Fill in the fields below. Takes less than 60 seconds.</p>
+          </div>
+
+          <label class="f">Select Course / Program
+            <select name="courseId" id="courseSelect" required>
+              <option value="">Loading official courses...</option>
+            </select>
+          </label>
+
+          <div class="cols">
+            <label class="f">Your Full Name
+              <input name="name" id="nameInp" autocomplete="name" required placeholder="e.g. Rafiqul Islam">
+            </label>
+            <label class="f">Active Phone / WhatsApp
+              <input name="phone" id="phoneInp" type="tel" autocomplete="tel" required placeholder="017xxxxxxxx">
+            </label>
+          </div>
+
+          <div class="cols">
+            <label class="f">Email Address (Optional)
+              <input name="email" id="emailInp" type="email" autocomplete="email" placeholder="student@example.com">
+            </label>
+            <label class="f">Preferred Batch Schedule
+              <select name="preferredTime">
+                <option value="Morning (10:00 AM - 12:00 PM)">Morning (10:00 AM – 12:00 PM)</option>
+                <option value="Afternoon (03:00 PM - 05:00 PM)">Afternoon (03:00 PM – 05:00 PM)</option>
+                <option value="Evening (06:00 PM - 08:00 PM)" selected>Evening (06:00 PM – 08:00 PM)</option>
+                <option value="Weekend Special (Friday & Saturday)">Weekend Special (Friday & Saturday)</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="f">Target Band Score / Specific Learning Notes (Optional)
+            <textarea name="message" id="msgInp" rows="3" maxlength="1000" placeholder="Mention your target band score (e.g. Band 7.5), preferred start date, or any specific English module questions..."></textarea>
+          </label>
+
+          <div class="msg bad" id="errMsg" hidden></div>
+
+          <button class="btn red" id="subBtn" style="width:100%;font-size:16px;padding:16px;margin-top:12px;border-radius:18px;display:flex;align-items:center;justify-content:center;gap:10px">
+            <span>Confirm & Reserve My Seat</span>
+            <span>→</span>
+          </button>
+          
+          <div style="text-align:center;margin-top:16px;font-size:12.5px;color:var(--mut)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Your contact information is kept strictly confidential and used solely for admission guidance.
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/site.js"></script>
+<script>
+(async () => {
+  // Kinetic Mouse Parallax on Hero Floating Objects
+  const heroWrap = document.getElementById('heroWrap');
+  const floatObjs = document.querySelectorAll('.float-obj');
+  const orbRed = document.getElementById('orbRed');
+  const orbBlue = document.getElementById('orbBlue');
+
+  if (heroWrap && floatObjs.length && window.matchMedia('(pointer:fine)').matches) {
+    heroWrap.addEventListener('mousemove', e => {
+      const rect = heroWrap.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+      floatObjs.forEach(obj => {
+        const depth = parseFloat(obj.dataset.depth || 0.1);
+        const moveX = relX * depth * 140;
+        const moveY = relY * depth * 140;
+        obj.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      });
+
+      if (orbRed) orbRed.style.transform = `translate(${relX * 60}px, ${relY * 60}px)`;
+      if (orbBlue) orbBlue.style.transform = `translate(${-relX * 60}px, ${-relY * 60}px)`;
+    });
+
+    heroWrap.addEventListener('mouseleave', () => {
+      floatObjs.forEach(obj => {
+        obj.style.transform = '';
+      });
+      if (orbRed) orbRed.style.transform = '';
+      if (orbBlue) orbBlue.style.transform = '';
+    });
+  }
+
+  // Form logic & Course pre-population
+  const form = document.getElementById('admForm');
+  const successBox = document.getElementById('successBox');
+  const errMsg = document.getElementById('errMsg');
+  const subBtn = document.getElementById('subBtn');
+  const courseSelect = document.getElementById('courseSelect');
+
+  const preParam = new URLSearchParams(location.search).get('course');
+
+  try {
+    const [courses, user] = await Promise.all([api('/courses'), getMe()]);
+    const list = Array.isArray(courses) ? courses : (courses && courses.items) || [];
+    
+    if (list.length) {
+      courseSelect.innerHTML = '<option value="">-- Choose Your Course / Module --</option>' + list.map(c => {
+        const isSelected = preParam && (c.slug === preParam || c._id === preParam);
+        const feeStr = c.fee > 0 ? ` — ৳ ${Number(c.fee).toLocaleString('en-IN')}` : '';
+        return `<option value="${esc(c._id)}"${isSelected ? ' selected' : ''}>${esc(c.title)}${feeStr}</option>`;
+      }).join('');
+    } else {
+      courseSelect.innerHTML = `
+        <option value="">-- Select a Course --</option>
+        <option value="ielts" ${preParam==='ielts-preparation'?'selected':''}>IELTS Regular Comprehensive Course</option>
+        <option value="spoken" ${preParam==='spoken-adult'?'selected':''}>Executive Spoken English (Adult)</option>
+        <option value="junior" ${preParam==='junior-spoken'?'selected':''}>Junior Spoken English</option>
+        <option value="set" ${preParam==='secondary-test'?'selected':''}>Secondary English Test (SET)</option>
+        <option value="pet" ${preParam==='primary-test'?'selected':''}>Primary English Test (PET)</option>
+      `;
+    }
+
+    if (user) {
+      if (user.name) document.getElementById('nameInp').value = user.name;
+      if (user.phone) document.getElementById('phoneInp').value = user.phone;
+      if (user.email) document.getElementById('emailInp').value = user.email;
+    }
+  } catch (err) {
+    courseSelect.innerHTML = '<option value="">General English & IELTS Program</option>';
+  }
+
+  form.onsubmit = async e => {
+    e.preventDefault();
+    errMsg.hidden = true;
+    subBtn.disabled = true;
+    subBtn.innerHTML = '<span>Reserving Seat...</span>';
+
+    const fd = new FormData(form);
+    const body = {
+      courseId: fd.get('courseId') || undefined,
+      name: (fd.get('name') || '').trim(),
+      phone: (fd.get('phone') || '').trim(),
+      email: (fd.get('email') || '').trim(),
+      message: `Preferred Batch: ${fd.get('preferredTime')}\nNotes: ${fd.get('message') || 'None'}`
+    };
+
+    if (!body.name || !body.phone) {
+      errMsg.textContent = 'Please enter your name and active phone number.';
+      errMsg.hidden = false;
+      subBtn.disabled = false;
+      subBtn.innerHTML = '<span>Confirm & Reserve My Seat</span><span>→</span>';
+      return;
+    }
+
+    try {
+      await api('/admissions', { method: 'POST', body });
+      form.style.display = 'none';
+      successBox.classList.add('show');
+    } catch (er) {
+      errMsg.textContent = er.message || 'Could not submit application. Please check your network or call our desk directly.';
+      errMsg.hidden = false;
+      subBtn.disabled = false;
+      subBtn.innerHTML = '<span>Confirm & Reserve My Seat</span><span>→</span>';
+    }
+  };
+})();
+</script>
+</body>
+</html>

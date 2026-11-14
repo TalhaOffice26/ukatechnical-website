@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+  <title>Courses Management | UKA Admin</title>
+  <style>
+    .course-card-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; font-size:12px; color:var(--mut); }
+    .course-badge { display:inline-block; padding:2px 8px; border-radius:12px; font-size:11px; font-weight:700; text-transform:uppercase; background:rgba(11,42,111,.08); color:var(--navy); }
+    .img-upload-box { display:flex; align-items:center; gap:12px; margin-top:6px; }
+    .img-prev-box { width:64px; height:64px; border-radius:10px; border:1px solid #cbd5e1; background:#f1f5f9; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+    .img-prev-box img { width:100%; height:100%; object-fit:cover; }
+    .btn-upload { background:#eff6ff; color:#1d4ed8; border:1px dashed #3b82f6; padding:6px 14px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+    .btn-upload:hover { background:#dbeafe; }
+  </style>
+</head>
+<body>
+<div class="adm"><aside><a class="brand" href="/" style="padding:10px 12px;margin:4px 0 14px;background:#fff;border-radius:14px;display:flex;flex-direction:column;align-items:center;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25)"><img src="/logo.png" width="160" height="33" alt="UKA & British Council" style="height:33px;max-width:160px;object-fit:contain;display:block"><small style="font:800 10px 'Plus Jakarta Sans';color:var(--navy);letter-spacing:.12em;text-transform:uppercase;margin-top:4px">Admin Portal</small></a><nav><a href="/admin/dashboard" class="">Dashboard</a><a href="/admin/courses" class="on">Courses</a><a href="/admin/admissions" class="">Admissions</a><a href="/admin/exam-dates" class="">Exam Dates</a><a href="/admin/messages" class="">Messages</a><a href="/admin/site-content-admin" class="">Site Content & Photos</a><a href="/admin/students" class="">Students</a><a href="/admin/settings" class="">Settings</a></nav><div class="who"><span id="admWhoName">Admin</span><small id="admWhoRole">admin</small><button data-lo>Logout</button></div></aside><main><header><h1>Courses Management</h1></header><section id="c"></section></main></div><div id="toast"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/admin.js"></script>
+<script>
+(async () => {
+  const u = await adminInit('courses', 'Courses Management');
+  if (!u) return;
+  const isA = u.role === 'admin', c = document.getElementById('c');
+  let list = [], editId = null;
+
+  c.innerHTML = `
+    <div class="tb" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <p style="margin:0;color:var(--mut);font-size:14px">Manage your IELTS, Spoken English, and other training programs. Changes reflect instantly on the website.</p>
+      </div>
+      <div>
+        ${isA ? '<button class="b red" id="add">+ Add New Course</button>' : '<small>Only an admin can modify courses.</small>'}
+      </div>
+    </div>
+    <div class="box">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:50px">#</th>
+            <th>Course Name & Details</th>
+            <th>Category</th>
+            <th>Fee</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+
+    <dialog id="dg" style="max-width:680px;width:95%">
+      <div class="dialog-head">
+        <h2 id="dt" style="margin:0;font-size:20px;color:var(--navy)">Course</h2>
+        <button type="button" class="dialog-close-btn" onclick="document.getElementById('dg').close()" title="Close">×</button>
+      </div>
+      <form id="fm">
+        <label class="f">
+          Course Title *
+          <input name="title" required maxlength="120" placeholder="e.g. Easy IELTS Course">
+        </label>
+        
+        <div class="cols">
+          <label class="f">
+            Slug (URL identifier)
+            <input name="slug" placeholder="e.g. easy-ielts-course (auto-generated if empty)">
+          </label>
+          <label class="f">
+            Category
+            <input name="category" placeholder="ielts, spoken, junior, etc.">
+          </label>
+          <label class="f">
+            Fee Billing Type
+            <select name="feeType">
+              <option value="one-time">One-time Full Course Fee</option>
+              <option value="monthly">Monthly Fee (প্রতি মাসে ফি)</option>
+            </select>
+          </label>
+          <label class="f">
+            Admission / Offer Fee (৳ BDT) *
+            <input name="fee" type="number" min="0" value="0" placeholder="e.g. 8000 (or 2000 for monthly)">
+          </label>
+          <label class="f">
+            Regular Fee (৳ BDT)
+            <input name="originalFee" type="number" min="0" value="0" placeholder="e.g. 16000 (shows strike-through)">
+          </label>
+          <label class="f">
+            Discount Badge
+            <input name="discountBadge" placeholder="e.g. 50% OFF (auto if empty)">
+          </label>
+          <label class="f">
+            Duration
+            <input name="duration" placeholder="e.g. 3 Months (32 Classes)">
+          </label>
+          <label class="f">
+            Level
+            <input name="level" placeholder="e.g. All Levels / Band 7.0+">
+          </label>
+          <label class="f">
+            Batch Seats
+            <input name="seats" type="number" min="0" placeholder="e.g. 15">
+          </label>
+          <label class="f">
+            Display Order
+            <input name="order" type="number" value="1">
+          </label>
+        </div>
+
+        <label class="f">
+          Course Photo
+          <div class="img-upload-box">
+            <div class="img-prev-box" id="imgPrev">
+              <span style="font-size:10px;color:#94a3b8">No Image</span>
+            </div>
+            <div style="flex:1">
+              <input name="image" id="courseImgUrl" placeholder="Image URL (e.g. /images/... or https://...)" style="margin-bottom:6px">
+              <label class="btn-upload">
+                Choose Photo to Upload
+                <input type="file" id="courseFileInp" accept="image/*" style="display:none">
+              </label>
+            </div>
+          </div>
+        </label>
+
+        <label class="f">
+          Short Description (Summary shown on course cards)
+          <input name="shortDesc" maxlength="300" placeholder="Short highlights, classes count, mock details...">
+        </label>
+
+        <label class="f">
+          Full Detailed Description
+          <textarea name="description" rows="5" placeholder="Full course overview, batch perks, mock test details..."></textarea>
+        </label>
+
+        <label class="f">
+          Syllabus & Feature Points (One point per line)
+          <textarea name="syllabus" rows="5" placeholder="32 Full Classes&#10;Weekly 3 Days Regular Classes&#10;6 Days Practice Lab Access&#10;5 Full-length Free Mock Tests"></textarea>
+        </label>
+
+        <label class="f" style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer">
+          <input type="checkbox" name="isActive" checked style="width:18px;height:18px">
+          <span style="font-weight:600">Show this course actively on the website</span>
+        </label>
+
+        <div class="tb" style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px">
+          <button type="button" class="b" id="cn">Cancel</button>
+          <button class="b red" id="sv">Save Course</button>
+        </div>
+      </form>
+    </dialog>
+  `;
+
+  const tb = document.getElementById('tb'), dg = document.getElementById('dg'), fm = document.getElementById('fm');
+  const imgUrlInp = document.getElementById('courseImgUrl'), imgPrev = document.getElementById('imgPrev'), fileInp = document.getElementById('courseFileInp');
+
+  const updatePreview = url => {
+    if (url && url.trim()) {
+      imgPrev.innerHTML = `<img src="${esc(url.trim())}" alt="Preview" onerror="this.src='';this.alt='Err'">`;
+    } else {
+      imgPrev.innerHTML = '<span style="font-size:10px;color:#94a3b8">No Image</span>';
+    }
+  };
+
+  imgUrlInp.addEventListener('input', e => updatePreview(e.target.value));
+
+  fileInp.addEventListener('change', async () => {
+    const file = fileInp.files[0];
+    if (!file) return;
+    const fd = new FormData();
+    fd.append('image', file);
+    try {
+      toast('Uploading photo...');
+      const r = await fetch('/api/upload', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: fd
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || 'Upload failed');
+      imgUrlInp.value = d.url;
+      updatePreview(d.url);
+      toast('Photo uploaded successfully!');
+    } catch (err) {
+      toast(err.message, 1);
+    }
+  });
+
+  const draw = () => {
+    if (!list.length) {
+      tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--mut)">No courses found. Click "+ Add New Course" to create one.</td></tr>';
+      return;
+    }
+    tb.innerHTML = list.map((x, i) => `
+      <tr>
+        <td><b>${x.order ?? 0}</b></td>
+        <td>
+          <div style="font-weight:700;font-size:15px;color:var(--navy)">${esc(x.title)}</div>
+          <div class="course-card-meta">
+            <span>Slug: <code>/${esc(x.slug || '')}</code></span>
+            ${x.level ? `<span>Level: ${esc(x.level)}</span>` : ''}
+            ${x.seats ? `<span>Seats: ${esc(x.seats)}</span>` : ''}
+          </div>
+        </td>
+        <td><span class="course-badge">${esc(x.category || 'General')}</span></td>
+        <td>
+          <b>${taka(x.fee)}${x.feeType === 'monthly' ? ' <small style="color:var(--mut)">/ Mo</small>' : ''}</b>
+          ${x.originalFee && x.originalFee > x.fee ? `<br><small style="color:var(--mut)"><del>${taka(x.originalFee)}</del> <span style="color:#dc2626;font-weight:700">(${esc(x.discountBadge || Math.round(((x.originalFee - x.fee) / x.originalFee) * 100) + '%')})</span></small>` : ''}
+        </td>
+        <td>${esc(x.duration || '—')}</td>
+        <td><span class="tag ${x.isActive ? 'on' : 'off'}">${x.isActive ? 'Visible' : 'Hidden'}</span></td>
+        <td style="text-align:right">
+          ${isA ? `
+            <button class="b" data-e="${i}">Edit</button>
+            <button class="b del" data-d="${i}">Delete</button>
+          ` : ''}
+        </td>
+      </tr>
+    `).join('');
+  };
+
+  const load = async () => {
+    try {
+      list = await api('/courses/admin/all');
+      draw();
+    } catch (e) {
+      toast(e.message, 1);
+    }
+  };
+
+  const open = x => {
+    editId = x ? x._id : null;
+    document.getElementById('dt').textContent = x ? 'Edit Course' : 'Add New Course';
+    fm.reset();
+    if (x) {
+      for (const k of ['title', 'slug', 'category', 'fee', 'originalFee', 'discountBadge', 'feeType', 'duration', 'level', 'seats', 'order', 'image', 'shortDesc', 'description']) {
+        if (fm[k]) fm[k].value = x[k] ?? '';
+      }
+      fm.syllabus.value = (x.syllabus || []).join('\n');
+      fm.isActive.checked = !!x.isActive;
+      updatePreview(x.image || '');
+    } else {
+      updatePreview('');
+    }
+    dg.showModal();
+  };
+
+  if (isA) document.getElementById('add').onclick = () => open(null);
+  document.getElementById('cn').onclick = () => dg.close();
+
+  tb.onclick = async e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.e !== undefined) return open(list[b.dataset.e]);
+    if (b.dataset.d !== undefined) {
+      const x = list[b.dataset.d];
+      if (!confirm('Are you sure you want to delete "' + x.title + '"?')) return;
+      try {
+        await api('/courses/' + x._id, { method: 'DELETE' });
+        toast('Course deleted successfully');
+        load();
+      } catch (er) {
+        toast(er.message, 1);
+      }
+    }
+  };
+
+  fm.onsubmit = async e => {
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(fm));
+    const body = {
+      title: v.title,
+      slug: v.slug,
+      category: v.category,
+      shortDesc: v.shortDesc,
+      description: v.description,
+      fee: +v.fee || 0,
+      originalFee: +v.originalFee || 0,
+      discountBadge: v.discountBadge ? v.discountBadge.trim() : undefined,
+      feeType: v.feeType || 'one-time',
+      duration: v.duration,
+      level: v.level,
+      seats: v.seats === '' ? undefined : +v.seats,
+      image: v.image,
+      order: +v.order || 0,
+      syllabus: v.syllabus.split('\n').map(s => s.trim()).filter(Boolean),
+      isActive: fm.isActive.checked
+    };
+    document.getElementById('sv').disabled = true;
+    try {
+      await api(editId ? '/courses/' + editId : '/courses', {
+        method: editId ? 'PUT' : 'POST',
+        body
+      });
+      dg.close();
+      toast('Course saved successfully!');
+      load();
+    } catch (er) {
+      toast(er.message, 1);
+    }
+    document.getElementById('sv').disabled = false;
+  };
+
+  load();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UKA Content Manager</title>
+<style>
+:root{--bg:#f3f6fb;--card:#fff;--ink:#0d1b3d;--mute:#5d6b89;--line:#dde4f0;--navy:#0d1b3d;--red:#d62839;--ok:#1a8f5a}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1424;--card:#161e33;--ink:#eaf0ff;--mute:#9aa8c7;--line:#27314d;--navy:#2a3a6a}}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink);display:flex;min-height:100vh}
+aside{width:230px;background:var(--navy);color:#fff;padding:20px 12px;position:sticky;top:0;height:100vh;flex-shrink:0}
+aside h1{font-size:18px;margin:0 8px 4px}aside small{display:block;margin:0 8px 20px;opacity:.7}
+aside button{display:block;width:100%;text-align:left;background:none;border:0;color:#fff;padding:11px 12px;border-radius:8px;font-size:15px;cursor:pointer;opacity:.8}
+aside button:hover{background:rgba(255,255,255,.1)}
+aside button.on{background:var(--red);opacity:1;font-weight:600}
+aside a{display:block;color:#fff;opacity:.7;margin:18px 12px 0;font-size:14px;text-decoration:none}
+main{flex:1;padding:28px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.top h2{margin:0;font-size:24px}
+.btn{background:var(--red);color:#fff;border:0;padding:10px 18px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn:focus-visible,aside button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.card.off{opacity:.55}
+.ph{aspect-ratio:16/10;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:13px}
+.ph img{width:100%;height:100%;object-fit:cover}
+.card .b{padding:12px 14px;flex:1}
+.card h3{margin:0 0 2px;font-size:16px}
+.card p{margin:2px 0;color:var(--mute);font-size:13px}
+.tag{display:inline-block;font-size:12px;padding:2px 8px;border-radius:99px;background:var(--bg);border:1px solid var(--line);margin-top:6px}
+.card .act{display:flex;gap:8px;padding:0 14px 14px}
+.empty{padding:50px;text-align:center;color:var(--mute);border:2px dashed var(--line);border-radius:12px}
+dialog{border:0;border-radius:14px;padding:0;width:min(560px,94vw);background:var(--card);color:var(--ink);max-height:92vh}
+dialog::backdrop{background:rgba(5,10,30,.55)}
+form{padding:22px;display:grid;gap:14px}
+form h3{margin:0;font-size:20px}
+label{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--mute)}
+input,select,textarea{font:inherit;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{min-height:80px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prev{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:var(--bg);display:none}
+.chk{display:flex;align-items:center;gap:8px;font-weight:600}
+.chk input{width:18px;height:18px}
+.foot{display:flex;justify-content:flex-end;gap:10px}
+#toast{position:fixed;bottom:22px;right:22px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none;z-index:99}
+#toast.show{opacity:1;transform:none}#toast.err{background:var(--red)}
+@media(max-width:760px){body{flex-direction:column}aside{width:100%;height:auto;position:static;display:flex;flex-wrap:wrap;gap:4px;padding:12px}aside h1,aside small,aside a{display:none}aside button{width:auto;padding:8px 12px;font-size:14px}main{padding:16px}.row{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<aside>
+  <h1>UKA Dashboard</h1><small>Content Manager</small>
+  <div id="nav"></div>
+  <a href="/admin">← Main admin</a>
+</aside>
+<main>
+  <div class="top"><h2 id="ttl"></h2><button class="btn" id="add">Add new</button></div>
+  <div id="list" class="grid"></div>
+</main>
+
+<dialog id="dlg">
+  <div class="dialog-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:1px solid #e1e7f6;padding-bottom:10px">
+    <h3 id="dt" style="margin:0"></h3>
+    <button type="button" class="dialog-close-btn" onclick="document.getElementById('dlg').close()" style="width:32px;height:32px;border-radius:50%;border:1px solid #e1e7f6;background:#f1f5f9;cursor:pointer;font-size:18px;font-weight:700">×</button>
+  </div>
+  <form id="f">
+    <label id="keyWrap">Photo slot (website-er kon jaygay)<select id="key"></select></label>
+    <label id="titleWrap">Title<input id="title"></label>
+    <label id="subWrap"><span id="subLbl">Subtitle</span><input id="subtitle"></label>
+    <label id="descWrap">Description<textarea id="description"></textarea></label>
+    <div class="row" id="extraRow"></div>
+    <label>Photo<input type="file" id="image" accept="image/jpeg,image/png,image/webp,image/gif"></label>
+    <img class="prev" id="prev" alt="Preview">
+    <div class="row">
+      <label>Order (choto number age)<input type="number" id="order" value="0"></label>
+      <label class="chk" style="align-self:end"><input type="checkbox" id="active" checked> Show on website</label>
+    </div>
+    <div class="foot"><button type="button" class="btn ghost" id="cancel">Cancel</button><button class="btn" id="save">Save</button></div>
+  </form>
+</dialog>
+<div id="toast" role="status"></div>
+
+<script>
+const SLOTS=[...[1,2,3].map(i=>['hero'+i,'Hero photo '+i]),...[1,2,3,4,5].map(i=>['lab'+i,'Lab / Mock section photo '+i]),...Array.from({length:8},(_,i)=>['course'+i,'Course card photo '+(i+1)]),...Array.from({length:8},(_,i)=>['ach'+i,'Achiever photo '+(i+1)])];
+const TABS={
+  course:{name:'Courses',one:'course',sub:'Short tagline',extra:[['price','Price'],['duration','Duration'],['category','Category (ielts / spoken / kids / online)'],['link','Link']]},
+  mock:{name:'Mock Tests',one:'mock test',sub:'Short tagline',extra:[['price','Price'],['duration','Duration'],['link','Booking link']]},
+  teacher:{name:'Teachers',one:'teacher',sub:'Designation',extra:[['qualification','Qualification'],['experience','Experience']]},
+  gallery:{name:'Gallery',one:'photo',sub:'Caption',extra:[['category','Category (lab / classroom / event)']]},
+  achiever:{name:'Achievers',one:'achiever',sub:'Score (e.g. Band 7.5)',extra:[['exam','Exam'],['year','Year']]},
+  slot:{name:'Site Photos',one:'site photo',slot:true}
+};
+let tab='course',items=[],editing=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m,err){const t=$('toast');t.textContent=m;t.className='show'+(err?' err':'');clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',2600)}
+async function api(url,opt={}){
+  const r=await fetch(url,{credentials:'same-origin',...opt});
+  const d=await r.json().catch(()=>({}));
+  if(r.status===401||r.status===403){location.href='/login.html?next=/admin/content';throw new Error('login')}
+  if(!r.ok)throw new Error(d.message||d.error||'Something went wrong');
+  return d;
+}
+$('nav').innerHTML=Object.entries(TABS).map(([k,v])=>`<button data-t="${k}">${v.name}</button>`).join('');
+$('nav').onclick=e=>{const k=e.target.dataset.t;if(k){tab=k;load()}};
+
+async function load(){
+  const T=TABS[tab];
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+  $('ttl').textContent=T.name;$('add').textContent='Add '+T.one;
+  $('list').innerHTML='<div class="empty">Loading…</div>';
+  try{items=await api('/api/content/'+tab+'/all');render()}catch(e){if(e.message!=='login')$('list').innerHTML='<div class="empty">'+esc(e.message)+'</div>'}
+}
+function render(){
+  const T=TABS[tab];
+  if(!items.length){$('list').innerHTML=`<div class="empty" style="grid-column:1/-1">Ekhono kono ${T.one} nai. "Add ${T.one}" e click kore shuru koro.</div>`;return}
+  $('list').innerHTML=items.map(it=>{
+    const slotName=T.slot?(SLOTS.find(s=>s[0]===it.key)||[0,it.key])[1]:'';
+    return `<div class="card ${it.active?'':'off'}">
+      <div class="ph">${it.image?`<img src="${esc(it.image)}" alt="" loading="lazy">`:'No photo'}</div>
+      <div class="b"><h3>${esc(T.slot?slotName:it.title||'(untitled)')}</h3>
+      ${it.subtitle?`<p>${esc(it.subtitle)}</p>`:''}
+      ${it.extra&&it.extra.price?`<span class="tag">${esc(it.extra.price)}</span>`:''}
+      <span class="tag">${it.active?'Visible':'Hidden'}</span></div>
+      <div class="act"><button class="btn sm ghost" data-e="${it._id}">Edit</button><button class="btn sm ghost" data-d="${it._id}">Delete</button></div></div>`}).join('');
+}
+$('list').onclick=async e=>{
+  if(e.target.dataset.e)openForm(items.find(i=>i._id===e.target.dataset.e));
+  if(e.target.dataset.d&&confirm('Eta delete korle ar fire pabe na. Sure?')){
+    try{await api(`/api/content/${tab}/${e.target.dataset.d}`,{method:'DELETE'});toast('Deleted');load()}catch(x){toast(x.message,1)}
+  }
+};
+$('add').onclick=()=>openForm(null);
+$('cancel').onclick=()=>$('dlg').close();
+$('image').onchange=e=>{const f=e.target.files[0];if(f){$('prev').src=URL.createObjectURL(f);$('prev').style.display='block'}};
+
+function openForm(it){
+  editing=it;const T=TABS[tab];
+  $('dt').textContent=(it?'Edit ':'Add ')+T.one;
+  $('f').reset();
+  $('keyWrap').style.display=T.slot?'grid':'none';
+  ['titleWrap','subWrap','descWrap'].forEach(id=>$(id).style.display=T.slot?'none':'grid');
+  $('extraRow').style.display=T.slot?'none':'grid';
+  if(T.slot)$('key').innerHTML=SLOTS.map(s=>`<option value="${s[0]}">${s[1]}</option>`).join('');
+  $('subLbl').textContent=T.sub||'Subtitle';
+  $('extraRow').innerHTML=(T.extra||[]).map(([k,l])=>`<label>${l}<input data-x="${k}"></label>`).join('');
+  const x=(it&&it.extra)||{};
+  if(it){
+    $('title').value=it.title||'';$('subtitle').value=it.subtitle||'';$('description').value=it.description||'';
+    $('order').value=it.order||0;$('active').checked=it.active!==false;
+    if(T.slot)$('key').value=it.key;
+    document.querySelectorAll('[data-x]').forEach(i=>i.value=x[i.dataset.x]||'');
+  }
+  $('prev').style.display=it&&it.image?'block':'none';$('prev').src=it&&it.image||'';
+  $('dlg').showModal();
+}
+$('f').onsubmit=async e=>{
+  e.preventDefault();const T=TABS[tab];
+  const fd=new FormData();
+  if(T.slot){fd.append('key',$('key').value);fd.append('title',$('key').value)}
+  else{fd.append('title',$('title').value.trim());fd.append('subtitle',$('subtitle').value.trim());fd.append('description',$('description').value.trim())}
+  const extra={...(editing&&editing.extra||{})};
+  document.querySelectorAll('[data-x]').forEach(i=>{extra[i.dataset.x]=i.value.trim()});
+  fd.append('extra',JSON.stringify(extra));
+  fd.append('order',$('order').value||0);fd.append('active',$('active').checked);
+  if($('image').files[0])fd.append('image',$('image').files[0]);
+  $('save').disabled=true;
+  try{
+    await api(editing?`/api/content/${tab}/${editing._id}`:`/api/content/${tab}`,{method:editing?'PUT':'POST',body:fd});
+    $('dlg').close();toast('Saved');load();
+  }catch(x){toast(x.message,1)}
+  $('save').disabled=false;
+};
+load();
+</script>
+</body>
+</html>

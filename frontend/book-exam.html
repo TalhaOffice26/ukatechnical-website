@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Book Official British Council IELTS Exam Seat | UKA Technical Institute</title>
+  <meta name="description" content="Register and book your British Council Computer-delivered IELTS exam seat at UKA Technical Institute Banasree, Dhaka. Standardized official fee 31,100 BDT, strictly 10 seats per slot.">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* Kinetic Cinematic Pagehead */
+    .book-hero{position:relative;background:linear-gradient(135deg,#050b1d 0%,#0b2a6f 60%,#17264f 100%);color:#fff;padding:clamp(60px,8vw,110px) 0 clamp(70px,8vw,95px);overflow:hidden}
+    
+    /* Ambient Glowing Light Orbs */
+    .glow-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;pointer-events:none;will-change:transform}
+    .orb-red{width:360px;height:360px;background:radial-gradient(circle,var(--red) 0%,transparent 70%);top:-80px;right:-40px;animation:pulse-orb 9s ease-in-out infinite alternate}
+    .orb-blue{width:450px;height:450px;background:radial-gradient(circle,#2b5bf4 0%,transparent 70%);bottom:-120px;left:-60px;animation:pulse-orb 11s ease-in-out infinite alternate-reverse}
+    @keyframes pulse-orb{0%{transform:scale(1) translate(0,0)}100%{transform:scale(1.25) translate(30px,20px)}}
+
+    /* Floating Interactive Scene Tokens */
+    .hero-scene{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+    .float-token{position:absolute;display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:24px;background:rgba(255,255,255,.12);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.24);color:#fff;font-weight:700;font-size:13px;box-shadow:0 18px 40px rgba(0,0,0,.25);will-change:transform;transition:transform .2s cubic-bezier(.25,.46,.45,.94)}
+    .float-token span.emoji{font-size:22px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+    .float-token b{color:#fff;display:block;font-size:13.5px}
+    .float-token small{color:#c9d5fb;font-size:11px;font-weight:600}
+    
+    .tk-1{top:18%;right:12%;animation:drift-1 7.5s ease-in-out infinite alternate}
+    .tk-2{bottom:20%;right:14%;animation:drift-2 8.5s ease-in-out infinite alternate}
+    .tk-3{top:28%;left:6%;animation:drift-3 9s ease-in-out infinite alternate}
+    .tk-4{bottom:16%;left:8%;animation:drift-4 7s ease-in-out infinite alternate}
+
+    @keyframes drift-1{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-24px,-28px) rotate(3deg)}}
+    @keyframes drift-2{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(25px,-25px) rotate(-4deg)}}
+    @keyframes drift-3{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(20px,26px) rotate(2deg)}}
+    @keyframes drift-4{0%{transform:translate(0,0) rotate(0deg)}100%{transform:translate(-20px,22px) rotate(-3deg)}}
+
+    /* Interactive Slot Selection Tiles */
+    .slot-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0 20px}
+    @media(max-width:600px){.slot-cards{grid-template-columns:1fr}}
+    
+    .slot-tile{border:2px solid var(--line);border-radius:20px;padding:18px;background:#f8faff;cursor:pointer;transition:all .3s var(--e);position:relative}
+    .slot-tile:hover{border-color:#b9d1ff;background:#f0f5ff;transform:translateY(-3px)}
+    .slot-tile.active{border-color:var(--navy);background:#fff;box-shadow:0 12px 30px rgba(11,42,111,.1);transform:translateY(-3px)}
+    .slot-tile.active:before{content:"✓ Selected";position:absolute;top:14px;right:14px;background:var(--navy);color:#fff;font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px}
+    .slot-tile-title{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px}
+    .slot-tile-desc{font-size:12.5px;color:var(--mut);line-height:1.5}
+    .slot-tile-time{font-size:12px;font-weight:700;color:var(--red);margin-top:6px}
+
+    /* Form Container */
+    .form-card{background:#fff;border:1.5px solid var(--line);border-radius:32px;padding:clamp(26px,4vw,44px);box-shadow:0 24px 60px rgba(11,42,111,.09);position:relative;overflow:hidden}
+    .form-card:before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--red),var(--blue))}
+    
+    .step-header{display:flex;align-items:center;gap:12px;margin:28px 0 16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .step-badge{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font:800 14px/30px 'Bricolage Grotesque';text-align:center}
+    .step-header h3{font-size:20px;color:var(--navy);margin:0}
+
+    /* Supervisor Card in Sidebar */
+    .supervisor-card{background:linear-gradient(135deg,#0b2a6f,#1a47b5);color:#fff;border-radius:24px;padding:26px;box-shadow:0 18px 45px rgba(11,42,111,.16);margin-top:22px;position:relative;overflow:hidden}
+    .supervisor-card:after{content:"";position:absolute;right:-25px;bottom:-25px;width:120px;height:120px;background:radial-gradient(circle,rgba(225,29,58,.4),transparent 70%);border-radius:50%}
+
+    /* Success Confetti Animation Box */
+    .success-celebrate{display:none;text-align:center;padding:45px 20px}
+    .success-celebrate.show{display:block;animation:cin-fadeup .6s var(--e) forwards}
+    .success-badge{width:86px;height:86px;background:#ecfdf3;border:2px solid #b7ebcc;border-radius:50%;display:grid;place-items:center;font-size:42px;margin:0 auto 20px;box-shadow:0 14px 35px rgba(11,107,58,.16)}
+  </style>
+</head>
+<body>
+  <header id="nav"><div class="w"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><ul class="menu" id="menu"><li class="mh"><div class="mhi"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><button class="mx" aria-label="Close menu">×</button></div></li><li class="has" style="--i:0"><a href="/ielts-exam">IELTS Exam</a><ul class="dd"><li class="va"><a href="/ielts-exam">View all IELTS Exam →</a></li><li><a href="/ielts-exam">About IELTS</a></li><li><a href="/ielts-academic">IELTS Academic</a></li><li><a href="/ielts-general">IELTS General Training</a></li><li><a href="/exam-dates">Exam Dates &amp; Fees</a></li><li><a href="/book-exam">Book Your Exam</a></li></ul></li><li class="has" style="--i:1"><a href="/mock-test">Mock Test</a><ul class="dd"><li class="va"><a href="/mock-test">View all Mock Test →</a></li><li><a href="/mock-test?type=full">IELTS FULL MOCK TEST</a></li><li><a href="/mock-test?type=reading">IELTS READING MOCK</a></li><li><a href="/mock-test?type=writing">IELTS WRITING MOCK</a></li><li><a href="/mock-test?type=speaking">IELTS SPEAKING MOCK</a></li></ul></li><li class="has" style="--i:2"><a href="/courses">Our Courses</a><ul class="dd"><li class="va"><a href="/courses">View all Our Courses →</a></li><li><a href="/courses">All Courses</a></li><li><a href="/courses#ielts-preparation">IELTS Preparation</a></li><li><a href="/courses#spoken-adult">Spoken English (Adult)</a></li><li><a href="/courses#junior-spoken">Junior Spoken English</a></li><li><a href="/set">Secondary English Test (SET)</a></li><li><a href="/pet">Primary English Test (PET)</a></li><li><a href="/study-abroad">Study Abroad Consultation</a></li><li><a href="/admission">Apply for Admission</a></li></ul></li><li class="has" style="--i:3"><a href="/about">About Us</a><ul class="dd"><li class="va"><a href="/about">View all About Us →</a></li><li><a href="/our-story">Our Story</a></li><li><a href="/our-chairman">Our Chairman</a></li><li><a href="/branches">Our Branches</a></li><li><a href="/our-team">Our Team</a></li><li><a href="/career">Career Opportunities</a></li><li><a href="/gallery">Photo Gallery</a></li><li><a href="/faq">FAQ</a></li></ul></li><li style="--i:4"><a href="/contact">Contact Us</a></li><li class="mf"><div class="mfi"><a class="s" href="/book-exam" style="grid-column:span 2">Book IELTS Exam</a><a class="wa2" href="https://wa.me/8801516579760?text=Hello%20UKA%20Technical%20Institute%2C%20I%20want%20to%20know%20more." target="_blank" rel="noopener">Chat on WhatsApp</a></div></li></ul><div class="auth"><a class="s" href="/book-exam" style="background:linear-gradient(135deg,var(--red),var(--red2));border-color:var(--red);color:#fff">Book Exam</a></div><button class="bg" id="bg" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div><div id="ov"></div></header>
+
+
+<section class="book-hero" id="heroWrap">
+  <!-- Glowing Ambient Light Spheres -->
+  <div class="glow-orb orb-red" id="orbRed"></div>
+  <div class="glow-orb orb-blue" id="orbBlue"></div>
+
+  <!-- Interactive Floating Scene Tokens -->
+  <div class="hero-scene" id="sceneWrap">
+    <div class="float-token tk-1" data-depth="0.08">
+      <span class="emoji"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      <div>
+        <b>British Council Center</b>
+        <small>Official Authorized Venue</small>
+      </div>
+    </div>
+    
+    <div class="float-token tk-2" data-depth="0.14">
+      <span class="emoji"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+      <div>
+        <b>Strictly 10 Seats</b>
+        <small>Zero Distraction Lab</small>
+      </div>
+    </div>
+    
+    <div class="float-token tk-3" data-depth="0.06">
+      <span class="emoji"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></span>
+      <div>
+        <b>5 Free Full Mocks</b>
+        <small>+ 1 Month Free Lab Access</small>
+      </div>
+    </div>
+    
+    <div class="float-token tk-4" data-depth="0.11">
+      <span class="emoji"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+      <div>
+        <b>Official Fee: ৳ 31,100</b>
+        <small>Zero Extra Service Fee</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="w" style="position:relative;z-index:2">
+    <div class="crumb"><a href="/">Home</a> / <a href="/exam-dates">Exam Dates</a> / <span>Book Seat</span></div>
+    <div class="badge-pill"><b></b>Official British Council Candidate Registration</div>
+    <h1>
+      <span><i style="--d:0">Book Your Official</i></span>
+      <span><i style="--d:1">Computer IELTS Seat</i></span>
+    </h1>
+    <p>Complete candidate verification below. Our British Council desk reserves your high-speed testing terminal, verifies your passport, and issues your official confirmation with 5 Free Mocks included.</p>
+  </div>
+</section>
+
+<!-- Sleek Straight Cinematic Ribbon -->
+<div class="cin-mq">
+  <div class="tr">
+    <span>100% Computer-Delivered IELTS<em></em></span>
+    <span>Official British Council Fee: ৳ 31,100<em></em></span>
+    <span>Strictly 10 Candidates Per Slot<em></em></span>
+    <span>5 Full-Length Mock Tests Free<em></em></span>
+    <span>1 Month Free Lab Practice Facility<em></em></span>
+    <span>Results in 3 to 5 Days<em></em></span>
+    <span>Free Passport Booking Assistance<em></em></span>
+  </div>
+</div>
+
+<main class="sec">
+  <div class="w">
+    <div class="two">
+      <div>
+        <div class="form-card">
+          <!-- Success State -->
+          <div class="success-celebrate" id="okMsg">
+            <div class="success-badge" style="font-size:28px;color:#16a34a">✓</div>
+            <h3 style="font-size:26px;color:var(--navy);margin:0 0 10px">Exam Seat Booking Received!</h3>
+            <p style="color:var(--mut);font-size:15px;line-height:1.6;max-width:520px;margin:0 auto 22px">
+              Your registration request has been submitted to the UKA British Council Test Center Desk. A registration supervisor will contact you via phone / WhatsApp shortly to verify your passport details and issue your official British Council candidate ticket.
+            </p>
+            <div style="background:#f8faff;border:1.5px solid #dce4f2;border-radius:18px;padding:18px 24px;max-width:440px;margin:0 auto 26px;text-align:left;font-size:13.5px;color:#33405f">
+              <div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px"><polyline points="20 6 9 17 4 12"/></svg><b>Complimentary Perks Active:</b> 5 Full Mocks + 1 Month Exam Lab Access</div>
+              <div style="margin-top:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><b>Testing Venue:</b> UKA Technical Institute, Banasree, Dhaka</div>
+              <div style="margin-top:6px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><b>Official Fee:</b> ৳ 31,100 (Zero Surcharge)</div>
+            </div>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+              <a class="btn ln" href="/">Back to Home</a>
+              <a class="btn red" id="successWaBtn" href="https://wa.me/8801516579760" target="_blank" rel="noopener">Connect on WhatsApp Now</a>
+            </div>
+          </div>
+
+          <!-- The Registration Form -->
+          <form id="bookForm" novalidate>
+            <!-- Registration Perks Banner -->
+            <div style="background:linear-gradient(135deg,#0b2a6f,#1a47b5);color:#fff;border-radius:22px;padding:22px 26px;margin-bottom:26px;box-shadow:0 14px 35px rgba(11,42,111,.15)">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">
+                <span class="badge" style="background:var(--red);color:#fff;font-weight:800;font-size:11.5px;text-transform:uppercase;padding:4px 12px;border-radius:14px">Candidate Package Included</span>
+                <span style="font-size:13px;font-weight:700;color:#c9d5fb">Fee: ৳ 31,100</span>
+              </div>
+              <div style="font-size:14.5px;line-height:1.6;display:grid;gap:6px">
+                <div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><b>5 Full-Length Computer Mock Tests FREE</b> — Evaluated with diagnostic performance report.</div>
+                <div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg><b>1 Month Practice Facility TOTALLY FREE</b> in our official British Council computer exam lab.</div>
+              </div>
+            </div>
+
+            <!-- Step 1: Test & Slot Selection -->
+            <div class="step-header" style="margin-top:0">
+              <div class="step-badge">1</div>
+              <h3>Test Module & Slot Selection</h3>
+            </div>
+
+            <div class="cols">
+              <label class="f">Test Module
+                <select name="testType" id="testTypeSelect" required>
+                  <option value="IELTS Academic (Computer-delivered)">IELTS Academic (Computer-delivered) — ৳ 31,100</option>
+                  <option value="IELTS General Training (Computer-delivered)">IELTS General Training (Computer-delivered) — ৳ 31,100</option>
+                </select>
+              </label>
+
+              <label class="f">Preferred Exam Date
+                <input type="date" name="preferredDate" id="dateInput" required>
+              </label>
+            </div>
+
+            <!-- Interactive Slot Selection Tiles -->
+            <label class="f" style="margin-bottom:8px">Choose Testing Slot (Strictly 10 Seats Cap)</label>
+            <input type="hidden" name="slotTime" id="slotTimeInput" value="Morning Slot (LRW 9:00 AM - 11:45 AM | Speaking 1:20 PM)">
+            
+            <div class="slot-cards" id="slotCardsWrap">
+              <div class="slot-tile active" data-slot="Morning Slot (LRW 9:00 AM - 11:45 AM | Speaking 1:20 PM)">
+                <div class="slot-tile-title">Slot A: Morning Session</div>
+                <div class="slot-tile-desc">LRW test in the morning on computer, followed by speaking interview in the afternoon.</div>
+                <div class="slot-tile-time"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>LRW 09:00 AM – 11:45 AM | <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>Speaking 01:20 PM</div>
+              </div>
+
+              <div class="slot-tile" data-slot="Day Slot (Speaking 9:00 AM | LRW 1:00 PM - 3:45 PM)">
+                <div class="slot-tile-title">Slot B: Day Session</div>
+                <div class="slot-tile-desc">Speaking interview in the morning, followed by LRW on computer in the afternoon.</div>
+                <div class="slot-tile-time"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>Speaking from 09:00 AM | <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>LRW 01:00 PM – 03:45 PM</div>
+              </div>
+            </div>
+
+            <div class="cols">
+              <label class="f">Exam Delivery Mode
+                <input type="text" name="deliveryMode" value="100% Computer-delivered (Official British Council Venue)" readonly style="background:#f0f4fc;font-weight:700;color:var(--navy)">
+              </label>
+              <label class="f">Official Fee
+                <input type="text" value="৳ 31,100 (Standard British Council Fee)" readonly style="background:#f0f4fc;font-weight:800;color:var(--red)">
+              </label>
+            </div>
+
+            <!-- Step 2: Candidate Passport Information -->
+            <div class="step-header">
+              <div class="step-badge">2</div>
+              <h3>Candidate Passport Information</h3>
+            </div>
+
+            <div class="cols">
+              <label class="f">Full Name (Exactly as shown on Passport)
+                <input name="name" id="nameInput" required placeholder="e.g. MOHAMMED RAHMAN">
+              </label>
+
+              <label class="f">Passport Number
+                <input name="passport" required placeholder="e.g. A12345678" style="text-transform:uppercase">
+              </label>
+            </div>
+
+            <div class="cols">
+              <label class="f">Active Phone / WhatsApp Number
+                <input name="phone" id="phoneInput" type="tel" required placeholder="017xxxxxxxx">
+              </label>
+
+              <label class="f">Email Address
+                <input name="email" id="emailInput" type="email" required placeholder="candidate@example.com">
+              </label>
+            </div>
+
+            <label class="f">Present Address / City
+              <input name="address" placeholder="e.g. House #10, Banasree, Dhaka">
+            </label>
+
+            <label class="f">Special Request / Previous Test History (Optional)
+              <textarea name="notes" rows="2" placeholder="Mention your target band score or previous IELTS test reference number..."></textarea>
+            </label>
+
+            <div class="msg bad" id="errMsg" hidden></div>
+
+            <button class="btn red" id="subBtn" style="width:100%;font-size:16px;padding:17px;margin-top:14px;border-radius:18px;display:flex;align-items:center;justify-content:center;gap:10px">
+              <span>Confirm & Lock Exam Seat (৳ 31,100)</span>
+              <span>→</span>
+            </button>
+            <div style="text-align:center;margin-top:14px;font-size:12.5px;color:var(--mut)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Zero extra service charges. Official British Council booking executed by UKA test center desk.
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column Sidebar Checklist -->
+      <div>
+        <div class="panel" style="position:sticky;top:100px;border-radius:28px">
+          <span style="color:var(--red);font-weight:800;font-size:12.5px;text-transform:uppercase;letter-spacing:.03em">Test Day Guidelines</span>
+          <h3 style="font-size:22px;color:var(--navy);margin:6px 0 16px">Test Day Checklist</h3>
+
+          <ul style="list-style:none;padding:0;margin:0 0 24px;display:grid;gap:14px;font-size:14px;color:#33405f">
+            <li style="display:flex;gap:12px;align-items:flex-start">
+              <span style="color:var(--red);font-weight:700;font-size:14px;padding:2px 8px;border-radius:10px;background:rgba(225,29,58,.1)">NOTE</span>
+              <span><b>Original Passport Mandatory:</b> You must bring the same valid original passport used during registration. Digital scans or photocopies are strictly prohibited.</span>
+            </li>
+            <li style="display:flex;gap:12px;align-items:flex-start">
+              <span class="u-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+              <span><b>Reporting Time:</b> Arrive at least 45 minutes prior to your test session for biometric fingerprint scanning, passport verification, and digital photo capture.</span>
+            </li>
+            <li style="display:flex;gap:12px;align-items:flex-start">
+              <span class="u-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+              <span><b>High-Speed Workstations:</b> Testing takes place in our official soundproof lab with Dell Core-i5 terminals and studio-grade audio headsets.</span>
+            </li>
+          </ul>
+
+          <!-- Dynamic British Council Supervisor Contact Box -->
+          <div class="supervisor-card" id="supervisorBox">
+            <span class="badge" style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:10px;display:inline-block;margin-bottom:8px">Urgent Assistance</span>
+            <h4 style="font-size:18px;color:#fff;margin:0 0 6px">Need Urgent Date Booking?</h4>
+            <p style="color:#e2e8f0;font-size:13.5px;line-height:1.55;margin:0 0 16px">
+              Call or message our direct British Council registration supervisor:
+            </p>
+            <a class="btn ln" id="supervisorWaBtn" href="https://wa.me/8801516579760?text=Hello%20UKA%2C%20I%20need%20urgent%20IELTS%20exam%20seat%20booking." target="_blank" rel="noopener" style="width:100%;text-align:center;background:#fff;color:var(--navy);border-color:#fff;font-weight:800;box-sizing:border-box">
+              <span id="supervisorText">WhatsApp: +880 1516-579760</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/site.js"></script>
+<script>
+(async () => {
+  // Kinetic Mouse Parallax on Hero Floating Tokens
+  const heroWrap = document.getElementById('heroWrap');
+  const floatTokens = document.querySelectorAll('.float-token');
+  const orbRed = document.getElementById('orbRed');
+  const orbBlue = document.getElementById('orbBlue');
+
+  if (heroWrap && floatTokens.length && window.matchMedia('(pointer:fine)').matches) {
+    heroWrap.addEventListener('mousemove', e => {
+      const rect = heroWrap.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+      floatTokens.forEach(obj => {
+        const depth = parseFloat(obj.dataset.depth || 0.1);
+        const moveX = relX * depth * 140;
+        const moveY = relY * depth * 140;
+        obj.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      });
+
+      if (orbRed) orbRed.style.transform = `translate(${relX * 60}px, ${relY * 60}px)`;
+      if (orbBlue) orbBlue.style.transform = `translate(${-relX * 60}px, ${-relY * 60}px)`;
+    });
+
+    heroWrap.addEventListener('mouseleave', () => {
+      floatTokens.forEach(obj => obj.style.transform = '');
+      if (orbRed) orbRed.style.transform = '';
+      if (orbBlue) orbBlue.style.transform = '';
+    });
+  }
+
+  // Interactive Slot Picker Tiles
+  const slotCardsWrap = document.getElementById('slotCardsWrap');
+  const slotTimeInput = document.getElementById('slotTimeInput');
+  const slotTiles = slotCardsWrap.querySelectorAll('.slot-tile');
+
+  slotTiles.forEach(tile => {
+    tile.addEventListener('click', () => {
+      slotTiles.forEach(t => t.classList.remove('active'));
+      tile.classList.add('active');
+      slotTimeInput.value = tile.dataset.slot;
+    });
+  });
+
+  // URL parameters prefill
+  const params = new URLSearchParams(location.search);
+  const qDate = params.get('date');
+  const qType = params.get('type') || params.get('test');
+  const qSlot = params.get('slot');
+
+  if (qDate) {
+    document.getElementById('dateInput').value = qDate;
+  } else {
+    const nextWeek = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
+    document.getElementById('dateInput').value = nextWeek;
+  }
+
+  if (qType) {
+    const sel = document.getElementById('testTypeSelect');
+    for (let opt of sel.options) {
+      if (opt.value.toLowerCase().includes(qType.toLowerCase())) {
+        opt.selected = true;
+        break;
+      }
+    }
+  }
+
+  if (qSlot) {
+    const isDay = qSlot.toLowerCase().includes('day');
+    slotTiles.forEach(tile => {
+      const match = isDay ? tile.dataset.slot.includes('Day') : tile.dataset.slot.includes('Morning');
+      tile.classList.toggle('active', match);
+      if (match) slotTimeInput.value = tile.dataset.slot;
+    });
+  }
+
+  // Dynamic British Council Supervisor Contact from /api/settings
+  try {
+    const s = await api('/settings');
+    if (s) {
+      const supWa = s.supervisorWhatsapp || s.whatsapp || '8801516579760';
+      const cleanWa = String(supWa).replace(/\D/g, '');
+      const supPhone = s.supervisorPhone || s.phone || '+880 1516-579760';
+
+      const supervisorWaBtn = document.getElementById('supervisorWaBtn');
+      const supervisorText = document.getElementById('supervisorText');
+      const successWaBtn = document.getElementById('successWaBtn');
+
+      if (cleanWa) {
+        const waLink = `https://wa.me/${cleanWa}?text=Hello%20UKA%20British%20Council%20Supervisor%2C%20I%20need%20urgent%20IELTS%20exam%20seat%20booking.`;
+        if (supervisorWaBtn) supervisorWaBtn.href = waLink;
+        if (supervisorText) supervisorText.textContent = `WhatsApp: ${supPhone}`;
+        if (successWaBtn) successWaBtn.href = waLink;
+      }
+    }
+  } catch (e) {
+    console.warn('Using default supervisor contact:', e);
+  }
+
+  // Autofill logged in candidate
+  try {
+    const u = await getMe();
+    if (u) {
+      if (u.name) document.getElementById('nameInput').value = u.name;
+      if (u.phone) document.getElementById('phoneInput').value = u.phone;
+      if (u.email) document.getElementById('emailInput').value = u.email;
+    }
+  } catch (e) {}
+
+  // Form submission
+  const form = document.getElementById('bookForm');
+  const okMsg = document.getElementById('okMsg');
+  const errMsg = document.getElementById('errMsg');
+  const subBtn = document.getElementById('subBtn');
+
+  form.onsubmit = async e => {
+    e.preventDefault();
+    errMsg.hidden = true;
+    subBtn.disabled = true;
+    subBtn.innerHTML = '<span>Locking Your Seat...</span>';
+
+    const fd = new FormData(form);
+    const body = {
+      courseTitle: `IELTS Exam Registration (${fd.get('testType')})`,
+      name: (fd.get('name') || '').trim(),
+      phone: (fd.get('phone') || '').trim(),
+      email: (fd.get('email') || '').trim(),
+      message: `Passport: ${(fd.get('passport') || '').trim().toUpperCase()}\nDelivery Mode: ${fd.get('deliveryMode')}\nSlot: ${slotTimeInput.value}\nPreferred Date: ${fd.get('preferredDate')}\nFee: 31,100 BDT\nOffers: 5 Free Mocks + 1 Month Free Lab Practice Included\nAddress: ${fd.get('address') || 'N/A'}\nNotes: ${fd.get('notes') || 'None'}`
+    };
+
+    if (!body.name || !body.phone || !fd.get('passport')) {
+      errMsg.textContent = 'Please provide candidate full name, passport number, and active phone.';
+      errMsg.hidden = false;
+      subBtn.disabled = false;
+      subBtn.innerHTML = '<span>Confirm & Lock Exam Seat (৳ 31,100)</span><span>→</span>';
+      return;
+    }
+
+    try {
+      await api('/admissions', { method: 'POST', body });
+      form.style.display = 'none';
+      okMsg.classList.add('show');
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    } catch (err) {
+      errMsg.textContent = err.message || 'Booking submission failed. Please verify your phone number and network.';
+      errMsg.hidden = false;
+      subBtn.disabled = false;
+      subBtn.innerHTML = '<span>Confirm & Lock Exam Seat (৳ 31,100)</span><span>→</span>';
+    }
+  };
+})();
+</script>
+</body>
+</html>

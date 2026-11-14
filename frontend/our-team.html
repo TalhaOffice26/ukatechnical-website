@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Our Team | Faculty, Advisors & Leadership | UKA Technical Institute</title>
+  <meta name="description" content="Meet the leadership, certified IELTS master trainers, spoken English faculty, and dedicated student career advisors at UKA Technical Institute.">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    .team-hero{background:linear-gradient(135deg,#050b1d 0%,#0b2a6f 60%,#172449 100%);color:#fff;padding:clamp(55px,7vw,85px) 0;position:relative;overflow:hidden}
+    .team-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:28px}
+    .team-stat{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:18px 22px}
+    .team-stat-num{font:800 32px 'Bricolage Grotesque';color:#fff}
+    .team-stat-lbl{font-size:13px;color:#c9d5fb;margin-top:4px;font-weight:600}
+
+    .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:26px;margin:34px 0}
+    .team-card{background:#fff;border:1.5px solid var(--line);border-radius:26px;overflow:hidden;display:flex;flex-direction:column;transition:all .35s var(--e);position:relative}
+    .team-card:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--red),var(--blue));opacity:0;transition:opacity .3s}
+    .team-card:hover{transform:translateY(-8px);box-shadow:0 24px 50px rgba(11,42,111,.14);border-color:var(--navy)}
+    .team-card:hover:before{opacity:1}
+    
+    .team-img-wrap{height:260px;position:relative;overflow:hidden;background:linear-gradient(135deg,#0b2a6f,#1a47b5)}
+    .team-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .5s var(--e)}
+    .team-card:hover .team-img-wrap img{transform:scale(1.05)}
+    .team-badge{position:absolute;bottom:12px;left:12px;background:rgba(5,12,40,.8);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:20px}
+    
+    .team-body{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1}
+    .team-body h3{font-size:20px;color:var(--navy);margin:0}
+    .team-designation{font-size:13.5px;font-weight:700;color:var(--red);line-height:1.4}
+    .team-bio{font-size:13.5px;color:var(--mut);line-height:1.6;flex:1}
+    .team-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+    .team-tag{background:#f0f4fd;color:#1e3a8a;border:1px solid #dbe6fe;padding:3px 10px;border-radius:12px;font-size:11.5px;font-weight:700}
+    
+    .team-footer{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  </style>
+</head>
+<body>
+  <header id="nav"><div class="w"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><ul class="menu" id="menu"><li class="mh"><div class="mhi"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><button class="mx" aria-label="Close menu">×</button></div></li><li class="has" style="--i:0"><a href="/ielts-exam">IELTS Exam</a><ul class="dd"><li class="va"><a href="/ielts-exam">View all IELTS Exam →</a></li><li><a href="/ielts-exam">About IELTS</a></li><li><a href="/ielts-academic">IELTS Academic</a></li><li><a href="/ielts-general">IELTS General Training</a></li><li><a href="/exam-dates">Exam Dates &amp; Fees</a></li><li><a href="/book-exam">Book Your Exam</a></li></ul></li><li class="has" style="--i:1"><a href="/mock-test">Mock Test</a><ul class="dd"><li class="va"><a href="/mock-test">View all Mock Test →</a></li><li><a href="/mock-test?type=full">IELTS FULL MOCK TEST</a></li><li><a href="/mock-test?type=reading">IELTS READING MOCK</a></li><li><a href="/mock-test?type=writing">IELTS WRITING MOCK</a></li><li><a href="/mock-test?type=speaking">IELTS SPEAKING MOCK</a></li></ul></li><li class="has" style="--i:2"><a href="/courses">Our Courses</a><ul class="dd"><li class="va"><a href="/courses">View all Our Courses →</a></li><li><a href="/courses">All Courses</a></li><li><a href="/courses#ielts-preparation">IELTS Preparation</a></li><li><a href="/courses#spoken-adult">Spoken English (Adult)</a></li><li><a href="/courses#junior-spoken">Junior Spoken English</a></li><li><a href="/set">Secondary English Test (SET)</a></li><li><a href="/pet">Primary English Test (PET)</a></li><li><a href="/study-abroad">Study Abroad Consultation</a></li><li><a href="/admission">Apply for Admission</a></li></ul></li><li class="has" style="--i:3"><a href="/about">About Us</a><ul class="dd"><li class="va"><a href="/about">View all About Us →</a></li><li><a href="/our-story">Our Story</a></li><li><a href="/our-chairman">Our Chairman</a></li><li><a href="/branches">Our Branches</a></li><li><a href="/our-team">Our Team</a></li><li><a href="/career">Career Opportunities</a></li><li><a href="/gallery">Photo Gallery</a></li><li><a href="/faq">FAQ</a></li></ul></li><li style="--i:4"><a href="/contact">Contact Us</a></li><li class="mf"><div class="mfi"><a class="s" href="/book-exam" style="grid-column:span 2">Book IELTS Exam</a><a class="wa2" href="https://wa.me/8801516579760?text=Hello%20UKA%20Technical%20Institute%2C%20I%20want%20to%20know%20more." target="_blank" rel="noopener">Chat on WhatsApp</a></div></li></ul><div class="auth"><a class="s" href="/book-exam" style="background:linear-gradient(135deg,var(--red),var(--red2));border-color:var(--red);color:#fff">Book Exam</a></div><button class="bg" id="bg" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div><div id="ov"></div></header>
+
+
+<section class="pagehead">
+  <svg class="plane-anim" width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 21l21-9L2 3v7l15 2-15 2z" fill="#ff4d62"/></svg>
+  <div class="w">
+    <div class="crumb"><a href="/">Home</a> / <a href="/about">About Us</a> / <span>Our Team</span></div>
+    <div class="badge-pill"><b></b>The People Behind UKA Technical Institute</div>
+    <h1><span><i style="--d:0">Meet Our Dedicated</i></span><span><i style="--d:1">Team & Faculty</i></span></h1>
+    <p>From Cambridge-certified IELTS master trainers and pedagogy experts to dedicated admissions counselors and student advisors — our team is committed to helping you achieve your global dreams.</p>
+    
+    <div class="team-stats">
+      <div class="team-stat">
+        <div class="team-stat-num">40+</div>
+        <div class="team-stat-lbl">Full-Time Educators & Staff</div>
+      </div>
+      <div class="team-stat">
+        <div class="team-stat-num">Band 8.5+</div>
+        <div class="team-stat-lbl">Certified IELTS Faculty</div>
+      </div>
+      <div class="team-stat">
+        <div class="team-stat-num">12,000+</div>
+        <div class="team-stat-lbl">Students Guided Successfully</div>
+      </div>
+      <div class="team-stat">
+        <div class="team-stat-num">98%</div>
+        <div class="team-stat-lbl">Student Satisfaction Rate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sleek Straight Cinematic Ribbon -->
+<div class="cin-mq">
+  <div class="tr">
+    <span>Cambridge & British Council Certified Faculty<em></em></span>
+    <span>Personalized 1-on-1 Mentorship<em></em></span>
+    <span>Dedicated Student Career Counselors<em></em></span>
+    <span>Native Pronunciation & Accent Coaches<em></em></span>
+    <span>Continuous Performance Diagnostic<em></em></span>
+    <span>Empowering Global Ambitions Daily<em></em></span>
+  </div>
+</div>
+
+<main class="sec">
+  <div class="w">
+    <!-- Department Filter Chips -->
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:28px">
+      <div class="chips" id="teamFilter" style="margin:0">
+        <button class="chip on" data-f="all">All Team Members</button>
+        <button class="chip" data-f="leadership">Leadership & Management</button>
+        <button class="chip" data-f="ielts">IELTS Master Trainers</button>
+        <button class="chip" data-f="spoken">Spoken & Language Coaches</button>
+        <button class="chip" data-f="advisor">Admissions & Advisors</button>
+      </div>
+      <div>
+        <a class="btn red" href="/admission" style="font-size:14px;padding:10px 22px">Join UKA Today →</a>
+      </div>
+    </div>
+
+    <!-- Team Cards Grid -->
+    <div class="team-grid" id="teamGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:50px;color:var(--mut)">Loading our team members...</div>
+    </div>
+
+    <!-- Join The Team Callout -->
+    <div class="panel" style="margin-top:60px;background:linear-gradient(135deg,#0b2a6f,#1a47b5);color:#fff">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px">
+        <div>
+          <span class="badge" style="background:var(--red);color:#fff;font-weight:800;font-size:12px;text-transform:uppercase;padding:5px 14px;border-radius:20px;display:inline-block;margin-bottom:10px">Career at UKA</span>
+          <h3 style="font-size:24px;color:#fff;margin:0 0 8px">Passionate About Teaching or Student Advising?</h3>
+          <p style="opacity:.9;max-width:620px;margin:0;font-size:15px">We are always expanding our academic faculty, examiners, and career counselor network. Competitive compensation and professional development provided.</p>
+        </div>
+        <a class="btn red" href="/career" style="background:#fff;color:var(--navy);font-weight:700;box-shadow:none;padding:14px 26px">Explore Open Positions →</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/site.js"></script>
+<script>
+(async () => {
+  const grid = document.getElementById('teamGrid');
+  const filterBox = document.getElementById('teamFilter');
+  let allMembers = [];
+  let currentFilter = 'all';
+
+  const DEFAULT_TEAM = [
+    {
+      title: 'Engr. K. M. Talha',
+      subtitle: 'Managing Director & Strategic Lead',
+      description: 'Dedicated to modernizing technical and linguistic education in Bangladesh with cutting-edge digital learning standards.',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
+      extra: { department: 'Leadership', skills: 'Academic Strategy · Vision', email: 'director@ukatechnical.com' }
+    },
+    {
+      title: 'Rafiqul Islam, CELTA',
+      subtitle: 'Head of IELTS Faculty & Lead Trainer',
+      description: 'Certified Cambridge CELTA instructor with Band 8.5 overall. Over 11 years coaching thousands of successful test takers.',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=80',
+      extra: { department: 'IELTS Faculty', skills: 'IELTS Writing Task 2 · Band 8.5', email: 'ielts@ukatechnical.com' }
+    },
+    {
+      title: 'Nusrat Jahan, MA TESOL',
+      subtitle: 'Senior IELTS Speaking Specialist',
+      description: 'Expert in eliminating speaking anxiety and refining natural cadence, lexical resource, and grammatical accuracy for high band scores.',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&auto=format&fit=crop&q=80',
+      extra: { department: 'IELTS Faculty', skills: 'Speaking Fluency · Pronunciation', email: 'nusrat@ukatechnical.com' }
+    },
+    {
+      title: 'Arif Chowdhury',
+      subtitle: 'Lead Spoken English Trainer',
+      description: 'Specializes in communicative language teaching, workplace presentation skills, and public speaking confidence building.',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&auto=format&fit=crop&q=80',
+      extra: { department: 'Spoken Trainers', skills: 'Adult Spoken · Corporate Comms', email: 'spoken@ukatechnical.com' }
+    },
+    {
+      title: 'Farhana Akhter',
+      subtitle: 'Junior English Pedagogy Lead',
+      description: 'Interactive learning specialist focused on making language acquisition fun, active, and confidence-boosting for young learners.',
+      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&auto=format&fit=crop&q=80',
+      extra: { department: 'Spoken Trainers', skills: 'SET & PET Prep · Phonetics', email: 'junior@ukatechnical.com' }
+    },
+    {
+      title: 'Tanvir Hossain',
+      subtitle: 'Head of Student Counseling & Admissions',
+      description: 'Assisting students with university placement, mock test diagnostic analysis, and official British Council exam booking.',
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&auto=format&fit=crop&q=80',
+      extra: { department: 'Admissions & Advisors', skills: 'Exam Guidance · University Advising', email: 'admissions@ukatechnical.com' }
+    }
+  ];
+
+  try {
+    const data = await api('/content/team');
+    allMembers = (data && data.length) ? data : DEFAULT_TEAM;
+  } catch (e) {
+    allMembers = DEFAULT_TEAM;
+  }
+
+  function render() {
+    const filtered = allMembers.filter(m => {
+      if (currentFilter === 'all') return true;
+      const dept = String((m.extra && m.extra.department) || m.subtitle || '').toLowerCase();
+      if (currentFilter === 'leadership') return dept.includes('lead') || dept.includes('director') || dept.includes('head');
+      if (currentFilter === 'ielts') return dept.includes('ielts');
+      if (currentFilter === 'spoken') return dept.includes('spoken') || dept.includes('language') || dept.includes('english');
+      if (currentFilter === 'advisor') return dept.includes('advisor') || dept.includes('counsel') || dept.includes('admiss');
+      return true;
+    });
+
+    if (!filtered.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--mut)">No team members found in this department.</div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(m => {
+      const x = m.extra || {};
+      const dept = x.department || 'Academic Faculty';
+      const skills = x.skills ? x.skills.split('·').map(s => `<span class="team-tag">${esc(s.trim())}</span>`).join('') : '';
+      const photo = m.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80';
+
+      return `
+        <div class="team-card">
+          <div class="team-img-wrap">
+            <img src="${esc(photo)}" alt="${esc(m.title)}" loading="lazy">
+            <span class="team-badge">${esc(dept)}</span>
+          </div>
+          <div class="team-body">
+            <h3>${esc(m.title)}</h3>
+            <div class="team-designation">${esc(m.subtitle || 'Faculty Specialist')}</div>
+            <div class="team-bio">${esc(m.description || '')}</div>
+            ${skills ? `<div class="team-tags">${skills}</div>` : ''}
+            <div class="team-footer">
+              <a class="btn ln" href="/contact" style="font-size:12.5px;padding:6px 14px">Get in Touch</a>
+              <a class="btn red" href="/admission" style="font-size:12.5px;padding:6px 14px">Enroll with Us</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  filterBox.addEventListener('click', e => {
+    const btn = e.target.closest('.chip');
+    if (!btn) return;
+    filterBox.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+    btn.classList.add('on');
+    currentFilter = btn.dataset.f;
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

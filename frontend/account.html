@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Student Portal | UKA Technical Institute</title>
+  <meta name="description" content="Manage your course enrolments, IELTS exam booking requests, and mock test status at UKA Technical Institute.">
+  <link rel="stylesheet" href="/css/site.css">
+  <style>
+    /* Flightdeck Passport Card */
+    .portal-passport{background:linear-gradient(135deg,#050c28,#0b2a6f);color:#fff;border-radius:28px;padding:clamp(24px,4vw,38px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;box-shadow:0 24px 60px rgba(5,12,40,.25);position:relative;overflow:hidden;margin-top:-60px;z-index:5}
+    .portal-passport:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.15) 1.2px,transparent 1.4px);background-size:24px 24px;-webkit-mask-image:radial-gradient(ellipse at 80% 50%,#000,transparent 70%);mask-image:radial-gradient(ellipse at 80% 50%,#000,transparent 70%)}
+    .passport-left{display:flex;align-items:center;gap:20px;position:relative;z-index:2}
+    .user-avatar{width:72px;height:72px;border-radius:22px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;display:grid;place-items:center;font:800 32px 'Bricolage Grotesque';box-shadow:0 8px 24px rgba(225,29,58,.35)}
+    .passport-meta h2{font:800 clamp(22px,3vw,32px)/1.1 'Bricolage Grotesque';letter-spacing:-.03em;margin:0 0 6px}
+    .passport-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px);padding:4px 12px;border-radius:20px;font:700 12px 'Plus Jakarta Sans'}
+    .passport-actions{display:flex;align-items:center;gap:12px;position:relative;z-index:2}
+
+    /* Portal Stats */
+    .portal-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:30px 0}
+    .stat-pill{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 8px 24px rgba(11,42,111,.04);display:flex;align-items:center;gap:14px}
+    .stat-pill em{width:46px;height:46px;border-radius:14px;background:var(--bg);display:grid;place-items:center;font-size:22px;font-style:normal;flex-shrink:0}
+    .stat-pill b{display:block;font:800 22px/1.1 'Bricolage Grotesque';color:var(--navy)}
+    .stat-pill span{display:block;font-size:12.5px;color:var(--mut)}
+
+    /* Quick Shortcuts Grid */
+    .quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-bottom:36px}
+    .q-card{background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:8px;text-decoration:none;transition:all .3s var(--e);position:relative;overflow:hidden}
+    .q-card:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(11,42,111,.1);border-color:var(--navy)}
+    .q-tag{position:absolute;top:16px;right:16px;background:#eef3ff;color:var(--navy);font:800 11px 'Bricolage Grotesque';padding:3px 9px;border-radius:20px}
+    .q-card:hover .q-tag{background:var(--red);color:#fff}
+
+    /* History Table */
+    .table-card{background:#fff;border:1.5px solid var(--line);border-radius:28px;padding:clamp(24px,4vw,38px);box-shadow:0 16px 44px rgba(11,42,111,.06)}
+    .history-table{width:100%;border-collapse:collapse;min-width:680px}
+    .history-table th,.history-table td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:14.5px}
+    .history-table th{background:var(--navy);color:#fff;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.03em}
+    .history-table th:first-child{border-top-left-radius:14px}
+    .history-table th:last-child{border-top-right-radius:14px}
+    .history-table tr:hover td{background:#fafbff}
+
+    .st-pending{background:#fff6e6;color:#9b5a00;border:1px solid #ffd480}
+    .st-approved{background:#e8f8ee;color:#0b5a33;border:1px solid #9ce5b8}
+    .st-contacted{background:#eef4ff;color:#0b2a6f;border:1px solid #bcd3ff}
+    .st-rejected{background:#ffebee;color:#b3112b;border:1px solid #ffb3bd}
+  </style>
+</head>
+<body>
+  <header id="nav"><div class="w"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><ul class="menu" id="menu"><li class="mh"><div class="mhi"><a class="logo" href="/"><img src="/logo.png" width="244" height="50" alt="UKA Technical Institute - British Council IELTS Exam Center"></a><button class="mx" aria-label="Close menu">×</button></div></li><li class="has" style="--i:0"><a href="/ielts-exam">IELTS Exam</a><ul class="dd"><li class="va"><a href="/ielts-exam">View all IELTS Exam →</a></li><li><a href="/ielts-exam">About IELTS</a></li><li><a href="/ielts-academic">IELTS Academic</a></li><li><a href="/ielts-general">IELTS General Training</a></li><li><a href="/exam-dates">Exam Dates &amp; Fees</a></li><li><a href="/book-exam">Book Your Exam</a></li></ul></li><li class="has" style="--i:1"><a href="/mock-test">Mock Test</a><ul class="dd"><li class="va"><a href="/mock-test">View all Mock Test →</a></li><li><a href="/mock-test?type=full">IELTS FULL MOCK TEST</a></li><li><a href="/mock-test?type=reading">IELTS READING MOCK</a></li><li><a href="/mock-test?type=writing">IELTS WRITING MOCK</a></li><li><a href="/mock-test?type=speaking">IELTS SPEAKING MOCK</a></li></ul></li><li class="has" style="--i:2"><a href="/courses">Our Courses</a><ul class="dd"><li class="va"><a href="/courses">View all Our Courses →</a></li><li><a href="/courses">All Courses</a></li><li><a href="/courses#ielts-preparation">IELTS Preparation</a></li><li><a href="/courses#spoken-adult">Spoken English (Adult)</a></li><li><a href="/courses#junior-spoken">Junior Spoken English</a></li><li><a href="/set">Secondary English Test (SET)</a></li><li><a href="/pet">Primary English Test (PET)</a></li><li><a href="/study-abroad">Study Abroad Consultation</a></li><li><a href="/admission">Apply for Admission</a></li></ul></li><li class="has" style="--i:3"><a href="/about">About Us</a><ul class="dd"><li class="va"><a href="/about">View all About Us →</a></li><li><a href="/our-story">Our Story</a></li><li><a href="/our-chairman">Our Chairman</a></li><li><a href="/branches">Our Branches</a></li><li><a href="/our-team">Our Team</a></li><li><a href="/career">Career Opportunities</a></li><li><a href="/gallery">Photo Gallery</a></li><li><a href="/faq">FAQ</a></li></ul></li><li style="--i:4"><a href="/contact">Contact Us</a></li><li class="mf"><div class="mfi"><a class="s" href="/book-exam" style="grid-column:span 2">Book IELTS Exam</a><a class="wa2" href="https://wa.me/8801516579760?text=Hello%20UKA%20Technical%20Institute%2C%20I%20want%20to%20know%20more." target="_blank" rel="noopener">Chat on WhatsApp</a></div></li></ul><div class="auth"><a class="s" href="/book-exam" style="background:linear-gradient(135deg,var(--red),var(--red2));border-color:var(--red);color:#fff">Book Exam</a></div><button class="bg" id="bg" aria-label="Menu" aria-expanded="false"><i></i><i></i><i></i></button></div><div id="ov"></div></header>
+
+
+<section class="pagehead" id="ph">
+  <div class="ob" style="--k:32;left:6%;top:28%"><div class="glass" style="padding:10px 18px;border-radius:20px;font:800 14px 'Bricolage Grotesque';color:#fff">Student Portal</div></div>
+  <div class="ob" style="--k:-24;right:8%;top:22%"><div class="glass" style="padding:10px 18px;border-radius:20px;font:800 14px 'Bricolage Grotesque';color:#fff">Official IELTS Candidate</div></div>
+  <svg class="plane-anim" width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 21l21-9L2 3v7l15 2-15 2z" fill="#ff4d62"/></svg>
+  <div class="w">
+    <div class="crumb"><a href="/">Home</a> / <span>Student Flightdeck</span></div>
+    <div class="badge-pill"><b></b>Verified Candidate Control Center</div>
+    <h1><span><i style="--d:0">Student Account &</i></span><span><i style="--d:1">Application Status</i></span></h1>
+    <p>Track your British Council IELTS registration status, view mock test allocations, and manage course enrollments.</p>
+  </div>
+</section>
+
+<!-- Slanted Ribbon -->
+<div class="cin-mq">
+  <div class="tr">
+    <span>Verified Candidate Identity<em></em></span>
+    <span>Computer Lab Practice Logs<em></em></span>
+    <span>Mock Performance Records<em></em></span>
+    <span>Admissions Tracking<em></em></span>
+  </div>
+</div>
+
+<main class="sec">
+  <div class="w">
+    <!-- User Profile Passport Banner -->
+    <div class="portal-passport rv">
+      <div class="passport-left">
+        <div class="user-avatar" id="uAvatar">S</div>
+        <div class="passport-meta">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <h2 id="uName">Loading candidate profile...</h2>
+            <span class="passport-badge" id="uRole">Candidate</span>
+          </div>
+          <div style="color:#c9d5fb;font-size:13.5px;margin-top:4px" id="uContact">Verifying credentials...</div>
+        </div>
+      </div>
+      <div class="passport-actions" id="passportActions">
+        <button class="btn ln" id="logoutBtn" style="border-color:rgba(255,255,255,.3);color:#fff;font-size:13.5px;padding:9px 20px" data-lo>Log Out</button>
+      </div>
+    </div>
+
+    <!-- Quick Stats Metric Strip -->
+    <div class="portal-stats rv">
+      <div class="stat-pill">
+        <em><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></em>
+        <div>
+          <b id="statApps">0</b>
+          <span>Applications Submitted</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <em><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></em>
+        <div>
+          <b>50% OFF</b>
+          <span>Mock Test Privilege</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <em><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></em>
+        <div>
+          <b>Authorized</b>
+          <span>British Council Venue</span>
+        </div>
+      </div>
+      <div class="stat-pill">
+        <em><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></em>
+        <div>
+          <b>10 Seats/Slot</b>
+          <span>Quiet Testing Station</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Shortcuts Bento -->
+    <div class="quick-grid rv">
+      <a class="q-card" href="/book-mock">
+        <span class="q-tag">50% Discount</span>
+        <span class="u-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span>
+        <b style="font-size:16px;color:var(--navy)">Book a Mock Test</b>
+        <span style="color:var(--mut);font-size:13px">1 Mock 750TK, 5 Mocks 3000TK in official lab</span>
+      </a>
+      <a class="q-card" href="/exam-dates">
+        <span class="q-tag">Morning / Day</span>
+        <span class="u-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+        <b style="font-size:16px;color:var(--navy)">IELTS Exam Dates</b>
+        <span style="color:var(--mut);font-size:13px">British Council Computer-delivered test schedule</span>
+      </a>
+      <a class="q-card" href="/courses">
+        <span class="q-tag">Explore</span>
+        <span class="u-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <b style="font-size:16px;color:var(--navy)">Course Catalog</b>
+        <span style="color:var(--mut);font-size:13px">Masterclass, Spoken English, SET & PET</span>
+      </a>
+      <a class="q-card" href="/study-abroad">
+        <span class="q-tag">Global</span>
+        <span class="u-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/></svg></span>
+        <b style="font-size:16px;color:var(--navy)">Study Abroad Desk</b>
+        <span style="color:var(--mut);font-size:13px">UK, Canada & Australia visa consultation</span>
+      </a>
+    </div>
+
+    <!-- Application / Booking History Table -->
+    <div class="table-card rv">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:14px">
+        <div>
+          <h2 style="font:800 clamp(22px,3vw,30px)/1.1 'Bricolage Grotesque';letter-spacing:-.03em;color:var(--navy);margin:0">My Bookings & Inquiries</h2>
+          <p style="color:var(--mut);font-size:14px;margin:4px 0 0">Real-time status of your admission requests and exam date submissions.</p>
+        </div>
+        <a class="btn red" href="/admission" style="font-size:13.5px;padding:9px 20px">+ New Admission Request</a>
+      </div>
+
+      <div style="overflow-x:auto">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Program / Service</th>
+              <th>Applicant Contact</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="appBody">
+            <tr><td colspan="5" style="text-align:center;padding:40px;color:var(--mut)">Loading your applications...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/site.js"></script>
+<script>
+(async () => {
+  const uName = document.getElementById('uName');
+  const uContact = document.getElementById('uContact');
+  const uAvatar = document.getElementById('uAvatar');
+  const uRole = document.getElementById('uRole');
+  const appBody = document.getElementById('appBody');
+  const statApps = document.getElementById('statApps');
+  const passportActions = document.getElementById('passportActions');
+
+  let user = null;
+
+  try {
+    user = await getMe();
+    if (!user) {
+      location.href = 'login.html?next=' + encodeURIComponent(location.pathname);
+      return;
+    }
+
+    uName.textContent = user.name;
+    uContact.textContent = `${user.email} ${user.phone ? ' • ' + user.phone : ''}`;
+    uAvatar.textContent = user.name.slice(0, 1).toUpperCase();
+    uRole.textContent = user.role === 'admin' ? 'Administrator' : 'Verified Candidate';
+
+    if (user.role === 'admin') {
+      const p = document.createElement('a');
+      p.className = 'btn red';
+      p.style.fontSize = '13.5px';
+      p.style.padding = '9px 18px';
+      p.href = '/admin/dashboard.html';
+      p.textContent = 'Admin Console →';
+      passportActions.prepend(p);
+    }
+  } catch (e) {
+    location.href = 'login.html';
+    return;
+  }
+
+  // Load user applications
+  try {
+    const list = await api('/admissions/mine');
+    statApps.textContent = list ? list.length : '0';
+
+    if (!list || !list.length) {
+      appBody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--mut)">You have not submitted any applications or bookings yet. <a href="/admission" style="color:var(--red);font-weight:700">Apply for a course now →</a></td></tr>';
+      return;
+    }
+
+    appBody.innerHTML = list.map(item => {
+      const dt = fdate(item.createdAt);
+      const st = item.status || 'pending';
+      const stClass = `st-${st}`;
+
+      return `
+        <tr>
+          <td><b>${dt}</b></td>
+          <td><b>${esc(item.courseTitle || 'Admission Request')}</b></td>
+          <td>${esc(item.phone || item.email || '—')}</td>
+          <td><span class="badge ${stClass}" style="text-transform:capitalize;padding:5px 12px;border-radius:20px;font-weight:700;font-size:12px">${esc(st)}</span></td>
+          <td><a class="btn ln" href="/contact" style="font-size:12px;padding:6px 14px">Inquiry Support</a></td>
+        </tr>
+      `;
+    }).join('');
+  } catch (e) {
+    appBody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--mut)">Could not load history. Please refresh or try again later.</td></tr>';
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+  <title>Settings, IELTS Photos & Offers | UKA Admin</title>
+  <style>
+    .subtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+    .subtabs button{background:#eef2f7;border:none;padding:10px 20px;border-radius:24px;font-weight:700;font-size:13.5px;color:#334155;cursor:pointer;transition:all .2s}
+    .subtabs button.active{background:var(--navy);color:#fff;box-shadow:0 4px 14px rgba(11,42,111,.25)}
+    .setting-section{display:none}
+    .setting-section.active{display:block}
+    .photo-uploader-card{background:#f8faff;border:1.5px solid #dce4f2;border-radius:18px;padding:22px;margin-bottom:20px;transition:border-color .2s}
+    .photo-uploader-card:hover{border-color:#b9cbee}
+    .photo-uploader-grid{display:grid;grid-template-columns:130px 1fr;gap:22px;align-items:center}
+    @media(max-width:640px){.photo-uploader-grid{grid-template-columns:1fr}}
+    .photo-preview{width:130px;height:95px;border-radius:14px;overflow:hidden;background:#e2e8f0;border:1.5px dashed #94a3b8;display:grid;place-items:center}
+    .photo-preview img{width:100%;height:100%;object-fit:cover}
+    .upload-btn-wrap{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+    .file-chip{padding:7px 16px;background:#eef2f7;border-radius:12px;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;border:1px solid #cbd5e1;color:var(--navy)}
+    .file-chip:hover{background:#e2e8f0}
+    .page-indicator-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:800;background:#dbeafe;color:#1e40af;margin-left:8px;vertical-align:middle}
+    .page-indicator-pill.green{background:#dcfce7;color:#15803d}
+    .page-indicator-pill.amber{background:#fef3c7;color:#92400e}
+    .page-indicator-pill.purple{background:#f3e8ff;color:#6b21a8}
+    .settings-bottom-bar{position:sticky;bottom:16px;background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:14px 24px;box-shadow:0 12px 35px rgba(5,12,40,.12);display:flex;justify-content:space-between;align-items:center;margin-top:24px;z-index:50}
+  </style>
+</head>
+<body>
+<div class="adm"><aside><a class="brand" href="/" style="padding:10px 12px;margin:4px 0 14px;background:#fff;border-radius:14px;display:flex;flex-direction:column;align-items:center;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25)"><img src="/logo.png" width="160" height="33" alt="UKA & British Council" style="height:33px;max-width:160px;object-fit:contain;display:block"><small style="font:800 10px 'Plus Jakarta Sans';color:var(--navy);letter-spacing:.12em;text-transform:uppercase;margin-top:4px">Admin Portal</small></a><nav><a href="/admin/dashboard" class="">Dashboard</a><a href="/admin/courses" class="">Courses</a><a href="/admin/admissions" class="">Admissions</a><a href="/admin/exam-dates" class="">Exam Dates</a><a href="/admin/messages" class="">Messages</a><a href="/admin/site-content-admin" class="">Site Content & Photos</a><a href="/admin/students" class="">Students</a><a href="/admin/settings" class="on">Settings</a></nav><div class="who"><span id="admWhoName">Admin</span><small id="admWhoRole">admin</small><button data-lo>Logout</button></div></aside><main><header><h1>Site Settings, IELTS Photos & Offers</h1></header><section id="c"></section></main></div><div id="toast"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/admin.js"></script>
+<script>
+(async () => {
+  const u = await adminInit('settings', 'Site Settings, IELTS Photos & Offers', true);
+  if (!u) return;
+  const c = document.getElementById('c');
+
+  c.innerHTML = `
+    <!-- Organized Category Tabs -->
+    <div class="subtabs" id="settingTabs">
+      <button type="button" class="active" data-sec="tab-venue">Campus & IELTS Venue Photos</button>
+      <button type="button" data-sec="tab-chairman">Chairman & Collegiate School</button>
+      <button type="button" data-sec="tab-contact">Helplines, WhatsApp & Address</button>
+      <button type="button" data-sec="tab-offers">Candidate Offers, Timings & Mocks</button>
+      <button type="button" data-sec="tab-counters">Statistics & Page Texts</button>
+    </div>
+
+    <form id="f">
+      <!-- TAB 1: CAMPUS & VENUE PHOTOS -->
+      <div class="setting-section active" id="tab-venue">
+        <div class="box" style="padding:28px">
+          <div style="margin-bottom:20px">
+            <h3 style="margin:0 0 4px;font-size:20px;color:var(--navy)">1. Main Campus & IELTS Exam Center Photos</h3>
+            <p style="color:var(--mut);font-size:13.5px;margin:0">
+              Update photos for the Banasree campus building, the British Council exam room, and Academic/General module cards. Every photo indicates exactly which public page it appears on.
+            </p>
+          </div>
+
+          <!-- Main Building Photo (branches.html) -->
+          <div class="photo-uploader-card">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              Main Banasree Campus Building Photo
+              <span class="page-indicator-pill green">Appears on: branches.html</span>
+            </div>
+            <div class="photo-uploader-grid">
+              <div class="photo-preview" id="buildingPrev" style="height:120px;width:100px">
+                <span style="font-size:11px;color:#64748b">No Preview</span>
+              </div>
+              <div>
+                <label class="f" style="margin-bottom:6px">Building Photo URL
+                  <input name="branchBuildingPhoto" id="buildingUrl" placeholder="https://... or /uploads/..." value="">
+                </label>
+                <div class="upload-btn-wrap">
+                  <label class="file-chip">
+                    Upload Building Photo
+                    <input type="file" accept="image/*" style="display:none" data-target="buildingUrl" data-prev="buildingPrev">
+                  </label>
+                  <small style="color:var(--mut)">Recommended: Vertical / portrait photo (e.g. 600x900px or 800x1200px).</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Homepage Hero Showcase Photo -->
+          <div class="photo-uploader-card" style="border: 1.5px solid #3b82f6; background: #f8faff;">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              Homepage Hero Showcase Photo (British Council IELTS Partners Meet)
+              <span class="page-indicator-pill" style="background:#e0e7ff;color:#3730a3">Appears on: Homepage (index.html Hero Section)</span>
+            </div>
+            <div class="photo-uploader-grid">
+              <div class="photo-preview" id="heroShowcasePrev">
+                <span style="font-size:11px;color:#64748b">No Preview</span>
+              </div>
+              <div>
+                <label class="f" style="margin-bottom:6px">Direct Image URL
+                  <input name="heroShowcasePhoto" id="heroShowcaseUrl" placeholder="/images/british-council-meet.png or /uploads/..." value="">
+                </label>
+                <div class="upload-btn-wrap">
+                  <label class="file-chip">
+                    Choose File to Upload
+                    <input type="file" accept="image/*" style="display:none" data-target="heroShowcaseUrl" data-prev="heroShowcasePrev">
+                  </label>
+                  <small style="color:var(--mut)">Recommended: High-resolution stage / celebration / partners meet photo.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exam Venue Photo (ielts-exam.html & exam-dates.html) -->
+          <div class="photo-uploader-card">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              British Council IELTS Exam Venue Lab Photo
+              <span class="page-indicator-pill">Appears on: ielts-exam.html & exam-dates.html</span>
+            </div>
+            <div class="photo-uploader-grid">
+              <div class="photo-preview" id="venuePrev">
+                <span style="font-size:11px;color:#64748b">No Preview</span>
+              </div>
+              <div>
+                <label class="f" style="margin-bottom:6px">Direct Image URL
+                  <input name="ieltsVenuePhoto" id="venueUrl" placeholder="https://... or /uploads/..." value="">
+                </label>
+                <div class="upload-btn-wrap">
+                  <label class="file-chip">
+                    Choose File to Upload
+                    <input type="file" accept="image/*" style="display:none" data-target="venueUrl" data-prev="venuePrev">
+                  </label>
+                  <small style="color:var(--mut)">Recommended: 1200x800px venue / Dell Core-i5 exam lab photo.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic Module Photo -->
+          <div class="photo-uploader-card">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              IELTS Academic (Computer-Delivered) Card Photo
+              <span class="page-indicator-pill">Appears on: ielts-exam.html & exam-dates.html</span>
+            </div>
+            <div class="photo-uploader-grid">
+              <div class="photo-preview" id="academicPrev">
+                <span style="font-size:11px;color:#64748b">No Preview</span>
+              </div>
+              <div>
+                <label class="f" style="margin-bottom:6px">Direct Image URL
+                  <input name="ieltsAcademicPhoto" id="academicUrl" placeholder="https://... or /uploads/..." value="">
+                </label>
+                <div class="upload-btn-wrap">
+                  <label class="file-chip">
+                    Choose File to Upload
+                    <input type="file" accept="image/*" style="display:none" data-target="academicUrl" data-prev="academicPrev">
+                  </label>
+                  <small style="color:var(--mut)">Recommended: 800x500px university / international study photo.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- General Training Module Photo -->
+          <div class="photo-uploader-card">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              IELTS General Training (Computer-Delivered) Card Photo
+              <span class="page-indicator-pill">Appears on: ielts-exam.html & exam-dates.html</span>
+            </div>
+            <div class="photo-uploader-grid">
+              <div class="photo-preview" id="generalPrev">
+                <span style="font-size:11px;color:#64748b">No Preview</span>
+              </div>
+              <div>
+                <label class="f" style="margin-bottom:6px">Direct Image URL
+                  <input name="ieltsGeneralPhoto" id="generalUrl" placeholder="https://... or /uploads/..." value="">
+                </label>
+                <div class="upload-btn-wrap">
+                  <label class="file-chip">
+                    Choose File to Upload
+                    <input type="file" accept="image/*" style="display:none" data-target="generalUrl" data-prev="generalPrev">
+                  </label>
+                  <small style="color:var(--mut)">Recommended: 800x500px immigration / professional work photo.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: CHAIRMAN & COLLEGIATE SCHOOL -->
+      <div class="setting-section" id="tab-chairman">
+        <div class="box" style="padding:28px">
+          <div style="margin-bottom:20px">
+            <h3 style="margin:0 0 4px;font-size:20px;color:var(--navy)">2. Our Chairman & UKA Collegiate School</h3>
+            <p style="color:var(--mut);font-size:13.5px;margin:0">
+              Manage the Chairman's circular halo portrait, designation and vision message, as well as UKA Collegiate School highlights and photos.
+            </p>
+          </div>
+
+          <!-- Chairman Profile -->
+          <div style="background:#f8faff;border:1.5px solid #dce4f2;border-radius:18px;padding:22px;margin-bottom:24px">
+            <div style="font-size:16px;font-weight:800;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              Honorable Chairman Profile
+              <span class="page-indicator-pill purple">Appears on: our-chairman.html</span>
+            </div>
+
+            <div class="photo-uploader-grid" style="margin-bottom:16px">
+              <div class="photo-preview" id="chairmanPrev" style="height:110px;width:110px;border-radius:50%">
+                <span style="font-size:11px;color:#64748b">No Preview</span>
+              </div>
+              <div>
+                <label class="f" style="margin-bottom:6px">Chairman Photo URL (renders as circular halo portrait)
+                  <input name="chairmanPhoto" id="chairmanUrl" placeholder="https://... or /uploads/..." value="">
+                </label>
+                <div class="upload-btn-wrap">
+                  <label class="file-chip">
+                    Upload Chairman Portrait
+                    <input type="file" accept="image/*" style="display:none" data-target="chairmanUrl" data-prev="chairmanPrev">
+                  </label>
+                  <small style="color:var(--mut)">Recommended: Clean high-res professional portrait photo.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="cols">
+              <label class="f">Chairman Full Name
+                <input name="chairmanName" placeholder="Engr. Md. Faruk Hossain">
+              </label>
+              <label class="f">Designation & Title
+                <input name="chairmanTitle" placeholder="Founder & Honorable Chairman, UKA Group">
+              </label>
+            </div>
+
+            <label class="f">Official Message from the Chairman
+              <textarea name="chairmanMessage" rows="4" placeholder="Dear students, respected guardians, and valued patrons..."></textarea>
+            </label>
+
+            <label class="f">Chairman Biography & Academic Background
+              <textarea name="chairmanBio" rows="4" placeholder="Biography, vision for international standard education, philanthropic projects..."></textarea>
+            </label>
+          </div>
+
+          <!-- UKA Collegiate School -->
+          <div style="background:#f8faff;border:1.5px solid #dce4f2;border-radius:18px;padding:22px">
+            <div style="font-size:16px;font-weight:800;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              UKA Collegiate School Section
+              <span class="page-indicator-pill amber">Appears on: about.html (UKA School Showcase)</span>
+            </div>
+
+            <div class="cols">
+              <label class="f">School Title
+                <input name="schoolTitle" placeholder="UKA Collegiate School">
+              </label>
+              <label class="f">School Official Website URL
+                <input name="schoolWebsiteUrl" placeholder="https://www.ukabd.info/">
+              </label>
+            </div>
+
+            <label class="f">School Subtitle / Tagline
+              <input name="schoolSubtitle" placeholder="Nurturing Future Leaders with Academic Excellence & Moral Values">
+            </label>
+
+            <label class="f">School Description & Curriculum Highlights
+              <textarea name="schoolDesc" rows="3" placeholder="Playgroup to Class 10 curriculum, modern science & computer labs, moral ethics, and native English phonetics..."></textarea>
+            </label>
+
+            <!-- School Photos 1, 2, 3 -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:16px">
+              <div class="photo-uploader-card" style="margin-bottom:0">
+                <b style="font-size:13px;color:var(--navy);display:block;margin-bottom:8px">School Photo 1 (Students)</b>
+                <div class="photo-preview" id="schoolPrev1" style="height:110px;width:100%;margin-bottom:10px">
+                  <span style="font-size:11px;color:#64748b">No Preview</span>
+                </div>
+                <input name="schoolPhoto1" id="schoolUrl1" placeholder="Photo 1 URL..." style="font-size:12px;margin-bottom:8px">
+                <label class="file-chip" style="width:100%;justify-content:center">
+                  Upload Photo 1
+                  <input type="file" accept="image/*" style="display:none" data-target="schoolUrl1" data-prev="schoolPrev1">
+                </label>
+              </div>
+
+              <div class="photo-uploader-card" style="margin-bottom:0">
+                <b style="font-size:13px;color:var(--navy);display:block;margin-bottom:8px">School Photo 2 (Activities)</b>
+                <div class="photo-preview" id="schoolPrev2" style="height:110px;width:100%;margin-bottom:10px">
+                  <span style="font-size:11px;color:#64748b">No Preview</span>
+                </div>
+                <input name="schoolPhoto2" id="schoolUrl2" placeholder="Photo 2 URL..." style="font-size:12px;margin-bottom:8px">
+                <label class="file-chip" style="width:100%;justify-content:center">
+                  Upload Photo 2
+                  <input type="file" accept="image/*" style="display:none" data-target="schoolUrl2" data-prev="schoolPrev2">
+                </label>
+              </div>
+
+              <div class="photo-uploader-card" style="margin-bottom:0">
+                <b style="font-size:13px;color:var(--navy);display:block;margin-bottom:8px">School Photo 3 (Campus Life)</b>
+                <div class="photo-preview" id="schoolPrev3" style="height:110px;width:100%;margin-bottom:10px">
+                  <span style="font-size:11px;color:#64748b">No Preview</span>
+                </div>
+                <input name="schoolPhoto3" id="schoolUrl3" placeholder="Photo 3 URL..." style="font-size:12px;margin-bottom:8px">
+                <label class="file-chip" style="width:100%;justify-content:center">
+                  Upload Photo 3
+                  <input type="file" accept="image/*" style="display:none" data-target="schoolUrl3" data-prev="schoolPrev3">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: CONTACT & HELPLINE SETTINGS -->
+      <div class="setting-section" id="tab-contact">
+        <div class="box" style="padding:28px">
+          <div style="margin-bottom:20px">
+            <h3 style="margin:0 0 4px;font-size:20px;color:var(--navy)">3. Contact, Helplines & Supervisor Hotline</h3>
+            <p style="color:var(--mut);font-size:13.5px;margin:0">
+              Update institutional contact details, WhatsApp emergency hotline, registration supervisor contact, and campus address.
+            </p>
+          </div>
+
+          <div style="background:#f1f5f9;border:1.5px solid #cbd5e1;border-radius:16px;padding:20px;margin-bottom:22px">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              British Council Registration Supervisor Direct Contact
+              <span class="page-indicator-pill">Appears on: book-exam.html (Urgent Booking Card)</span>
+            </div>
+            <small style="color:var(--mut);display:block;margin-bottom:14px">Displayed under "Need Urgent Date Booking?". Directly connects candidates with the registration supervisor.</small>
+            <div class="cols">
+              <label class="f">Supervisor WhatsApp (Digits only, e.g. 8801516579760)
+                <input name="supervisorWhatsapp" placeholder="8801516579760">
+              </label>
+              <label class="f">Supervisor Display Phone (e.g. +880 1516-579760)
+                <input name="supervisorPhone" placeholder="+880 1516-579760">
+              </label>
+            </div>
+          </div>
+
+          <div style="background:#f8faff;border:1.5px solid #dce4f2;border-radius:16px;padding:20px;margin-bottom:22px">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              Official Contact Numbers & Hotlines
+              <span class="page-indicator-pill green">Appears on: contact.html (Reach Our Desks)</span>
+            </div>
+            <small style="color:var(--mut);display:block;margin-bottom:14px">These 3 phone numbers display on the Contact Us page, Header/Footer, and WhatsApp direct links.</small>
+
+            <div class="cols">
+              <label class="f">1st Number: WhatsApp (Digits only)
+                <input name="whatsapp" placeholder="8801516579760">
+              </label>
+              <label class="f">1st Number: Display Phone (WhatsApp & Hotline)
+                <input name="phone" placeholder="+880 1516-579760">
+              </label>
+            </div>
+
+            <div class="cols">
+              <label class="f">2nd Number: Admissions & Booking Desk
+                <input name="phone2" placeholder="+880 1407-063460">
+              </label>
+              <label class="f">3rd Number: Student Support & Helpdesk
+                <input name="phone3" placeholder="+880 1407-063431">
+              </label>
+            </div>
+          </div>
+
+          <div class="cols">
+            <label class="f">Official Contact Email
+              <input name="email" type="email" placeholder="info@ukatechnical.com">
+            </label>
+            <label class="f">Call Agent Phone (AI/Helpdesk)
+              <input name="callAgentPhone" placeholder="+8801516579760">
+            </label>
+          </div>
+
+          <label class="f">Head Campus Physical Address
+            <input name="address" placeholder="House 12, Road Avenue-8, Block M, Banasree, Dhaka">
+          </label>
+
+          <label class="f">Calling Agent Web URL (Optional)
+            <input name="callAgentUrl" placeholder="https://your-calling-agent-url.com">
+          </label>
+
+          <!-- AI Voice Calling Agent Configuration -->
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:16px;padding:20px;margin-top:22px">
+            <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+              AI Voice Admissions Counselor (Sara / Rayhan)
+              <span class="page-indicator-pill green">Appears on: All Public Pages (Phone Call FAB)</span>
+            </div>
+            <small style="color:var(--mut);display:block;margin-bottom:14px">Control Sara's speech engine, custom ElevenLabs API credentials, and voice model IDs. If left blank, the system automatically uses the free native Bangladeshi voice.</small>
+
+            <div class="cols">
+              <label class="f">ElevenLabs API Key (Optional - for Starter tier human voices)
+                <input name="elevenlabsApiKey" type="password" placeholder="sk_... (leave empty for free unlimited native voice)">
+              </label>
+              <label class="f">ElevenLabs Custom Voice ID (Optional)
+                <input name="agentVoiceId" placeholder="vvOYlSJHf8lTWIG4tDNP (Rayhan) or 8e81Dm4CldjBZSlArGoT (Rimjhim)">
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: OFFERS, TIMINGS & MOCKS -->
+      <div class="setting-section" id="tab-offers">
+        <div class="box" style="padding:28px">
+          <div style="margin-bottom:20px">
+            <h3 style="margin:0 0 4px;font-size:20px;color:var(--navy)">4. IELTS Candidate Offers, Slot Timings & Mock Packages</h3>
+            <p style="color:var(--mut);font-size:13.5px;margin:0">
+              Manage free candidate perks, computer test morning/day slot hours, and mock test package fees.
+            </p>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label class="f">
+              <span style="font-size:14.5px;font-weight:700;color:var(--navy)">
+                IELTS Candidate Free Registration Offers (One offer per line)
+                <span class="page-indicator-pill">Appears on: ielts-exam.html, exam-dates.html & book-exam.html</span>
+              </span>
+              <textarea name="ieltsOffers" rows="3" placeholder="5 Full-length Mock Tests FREE upon registration&#10;1 Month Practice Facility TOTALLY FREE in main British Council computer exam lab after registration"></textarea>
+            </label>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label class="f">
+              <span style="font-size:14.5px;font-weight:700;color:var(--navy)">
+                ⏰ Computer-Delivered Testing Slots Summary Text
+                <span class="page-indicator-pill">Appears on: ielts-exam.html & exam-dates.html</span>
+              </span>
+              <textarea name="ieltsSlotsInfo" rows="3" placeholder="Morning Slot: LRW 9:00 AM - 11:45 AM (10 Seats) | Speaking from 1:20 PM (20m slots)&#10;Day Slot: Speaking from 9:00 AM (20m slots) | LRW 1:00 PM - 3:45 PM (10 Seats)"></textarea>
+            </label>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label class="f">
+              <span style="font-size:14.5px;font-weight:700;color:var(--navy)">
+                Mock Test Packages JSON (50% Discount Schedule)
+                <span class="page-indicator-pill green">Appears on: mock-test.html</span>
+              </span>
+              <small style="color:var(--mut);display:block;margin-bottom:6px">1 MOCK 750TK, 2 MOCK 1400TK, 5 MOCK 3000TK, 10 MOCK 5000TK</small>
+              <textarea name="mockPackages" rows="6" style="font-family:monospace;font-size:13px"></textarea>
+            </label>
+          </div>
+
+          <div>
+            <label class="f">
+              <span style="font-size:14.5px;font-weight:700;color:var(--navy)">
+                ⭐ Official Mock Test Advantages (One feature per line)
+                <span class="page-indicator-pill green">Appears on: mock-test.html</span>
+              </span>
+              <textarea name="mockFeatures" rows="5" placeholder="Real exam environment&#10;Exam in main exam center&#10;Result in 24 hour&#10;Feedback&#10;Exam in real exam server"></textarea>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: COUNTERS & PAGE TEXTS -->
+      <div class="setting-section" id="tab-counters">
+        <div class="box" style="padding:28px">
+          <div style="margin-bottom:20px">
+            <h3 style="margin:0 0 4px;font-size:20px;color:var(--navy)">5. Live Statistics Counters & Dynamic Public Texts</h3>
+            <p style="color:var(--mut);font-size:13.5px;margin:0">
+              Numbers displayed across the homepage counter ribbon, and institutional overview text.
+            </p>
+          </div>
+
+          <div style="background:#f8faff;border:1.5px solid #dce4f2;border-radius:18px;padding:20px;margin-bottom:22px">
+            <b style="font-size:14.5px;color:var(--navy);display:block;margin-bottom:10px">
+              Homepage Live Statistics Counters
+              <span class="page-indicator-pill">Appears on: index.html</span>
+            </b>
+            <div class="cols">
+              <label class="f">Students Trained
+                <input name="students" type="number" min="0">
+              </label>
+              <label class="f">Satisfaction %
+                <input name="satisfaction" type="number" min="0" max="100">
+              </label>
+              <label class="f">Expert Teachers
+                <input name="teachers" type="number" min="0">
+              </label>
+              <label class="f">Branches Count
+                <input name="branches" type="number" min="0">
+              </label>
+            </div>
+          </div>
+
+          <label class="f">
+            About Us Summary Text
+            <span class="page-indicator-pill">Appears on: about.html</span>
+            <textarea name="about" rows="3" placeholder="About UKA Technical Institute overview..."></textarea>
+          </label>
+
+          <label class="f">
+            Our Story Text
+            <span class="page-indicator-pill">Appears on: our-story.html</span>
+            <textarea name="story" rows="3" placeholder="The founding story and journey..."></textarea>
+          </label>
+
+          <label class="f">
+            Privacy Policy & Candidate Data Terms
+            <span class="page-indicator-pill">Appears on: privacy.html</span>
+            <textarea name="privacy" rows="4" placeholder="Candidate data protection policy..."></textarea>
+          </label>
+        </div>
+      </div>
+
+      <!-- Sticky Save Bar -->
+      <div class="settings-bottom-bar">
+        <div>
+          <b style="color:var(--navy);font-size:15px;display:block">Save Changes</b>
+          <small style="color:var(--mut)">Saves all configuration, photos & text across all tabs.</small>
+        </div>
+        <button class="b red" id="sv" style="padding:14px 34px;font-size:15px;font-weight:700">Save All Settings</button>
+      </div>
+    </form>
+  `;
+
+  // Tab switching logic
+  const tabBtns = document.querySelectorAll('#settingTabs button');
+  const sections = document.querySelectorAll('.setting-section');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      const targetSec = document.getElementById(btn.dataset.sec);
+      if (targetSec) targetSec.classList.add('active');
+    });
+  });
+
+  const f = document.getElementById('f');
+  const updatePrev = (boxId, url) => {
+    const el = document.getElementById(boxId);
+    if (!el) return;
+    if (url && url.trim()) {
+      el.innerHTML = `<img src="${esc(url.trim())}" alt="Preview" onerror="this.src='';this.alt='Invalid URL'">`;
+    } else {
+      el.innerHTML = '<span style="font-size:11px;color:#64748b">No Preview</span>';
+    }
+  };
+
+  // Preview listeners
+  document.getElementById('heroShowcaseUrl').addEventListener('input', e => updatePrev('heroShowcasePrev', e.target.value));
+  document.getElementById('venueUrl').addEventListener('input', e => updatePrev('venuePrev', e.target.value));
+  document.getElementById('academicUrl').addEventListener('input', e => updatePrev('academicPrev', e.target.value));
+  document.getElementById('generalUrl').addEventListener('input', e => updatePrev('generalPrev', e.target.value));
+  document.getElementById('buildingUrl').addEventListener('input', e => updatePrev('buildingPrev', e.target.value));
+  document.getElementById('chairmanUrl').addEventListener('input', e => updatePrev('chairmanPrev', e.target.value));
+  document.getElementById('schoolUrl1').addEventListener('input', e => updatePrev('schoolPrev1', e.target.value));
+  document.getElementById('schoolUrl2').addEventListener('input', e => updatePrev('schoolPrev2', e.target.value));
+  document.getElementById('schoolUrl3').addEventListener('input', e => updatePrev('schoolPrev3', e.target.value));
+
+  // File upload handler
+  document.querySelectorAll('input[type="file"][data-target]').forEach(input => {
+    input.addEventListener('change', async () => {
+      const file = input.files[0];
+      if (!file) return;
+      const targetId = input.dataset.target;
+      const prevId = input.dataset.prev;
+      const targetInp = document.getElementById(targetId);
+      
+      const fd = new FormData();
+      fd.append('image', file);
+
+      try {
+        toast('Uploading photo...');
+        const r = await fetch('/api/upload', {
+          method: 'POST',
+          credentials: 'same-origin',
+          body: fd
+        });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Upload failed');
+        if (targetInp) {
+          targetInp.value = d.url;
+          updatePrev(prevId, d.url);
+        }
+        toast('Photo uploaded successfully!');
+      } catch (err) {
+        toast(err.message, 1);
+      }
+    });
+  });
+
+  // Load existing settings
+  try {
+    const s = await api('/settings');
+    for (const k in s) {
+      if (f[k]) f[k].value = s[k] ?? '';
+    }
+    updatePrev('heroShowcasePrev', s.heroShowcasePhoto || '/images/british-council-meet.png');
+    updatePrev('venuePrev', s.ieltsVenuePhoto);
+    updatePrev('academicPrev', s.ieltsAcademicPhoto);
+    updatePrev('generalPrev', s.ieltsGeneralPhoto);
+    updatePrev('buildingPrev', s.branchBuildingPhoto);
+    updatePrev('chairmanPrev', s.chairmanPhoto);
+    updatePrev('schoolPrev1', s.schoolPhoto1);
+    updatePrev('schoolPrev2', s.schoolPhoto2);
+    updatePrev('schoolPrev3', s.schoolPhoto3);
+  } catch (e) {
+    toast(e.message, 1);
+  }
+
+  // Submit form
+  f.onsubmit = async e => {
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(f));
+    for (const k of ['students', 'satisfaction', 'teachers', 'branches']) {
+      v[k] = +v[k] || 0;
+    }
+    v.whatsapp = String(v.whatsapp).replace(/\D/g, '');
+
+    document.getElementById('sv').disabled = true;
+    document.getElementById('sv').textContent = 'Saving...';
+    try {
+      await api('/settings', { method: 'PUT', body: v });
+      toast('All settings and photos saved successfully!');
+    } catch (er) {
+      toast(er.message, 1);
+    }
+    document.getElementById('sv').disabled = false;
+    document.getElementById('sv').textContent = 'Save All Settings';
+  };
+})();
+</script>
+</body>
+</html>

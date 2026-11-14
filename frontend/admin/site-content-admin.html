@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+  <title>Site Content & 100% SEO Blog Publisher | UKA Admin</title>
+  <style>
+    .img-mode-toggle{display:flex;gap:10px;margin-bottom:10px}
+    .img-mode-toggle button{padding:6px 14px;border-radius:20px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:12.5px;cursor:pointer}
+    .img-mode-toggle button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .img-preview-box{width:160px;height:100px;border-radius:10px;border:1.5px dashed #c9d5fb;background:#f7f9ff;display:grid;place-items:center;overflow:hidden;margin-top:10px}
+    .img-preview-box img{width:100%;height:100%;object-fit:cover}
+    .seo-preview{background:#fff;border:1.5px solid #dbe2ea;border-radius:14px;padding:16px 20px;margin:18px 0;box-shadow:0 6px 16px rgba(0,0,0,.04)}
+    .seo-preview-url{font-size:12px;color:#202124;display:flex;align-items:center;gap:6px;margin-bottom:4px}
+    .seo-preview-title{font-size:18px;color:#1a0dab;font-weight:600;text-decoration:none;cursor:pointer;line-height:1.3;margin-bottom:4px}
+    .seo-preview-desc{font-size:13px;color:#4d5156;line-height:1.5}
+    .char-cnt{font-size:11px;font-weight:700;float:right;color:#64748b}
+    .char-cnt.good{color:#16a34a}
+    .char-cnt.warn{color:#e11d48}
+    .subtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+    .subtabs button{background:#eef2f7;border:none;padding:8px 18px;border-radius:20px;font-weight:700;font-size:13.5px;color:#334155;cursor:pointer;transition:all .2s}
+    .subtabs button.active{background:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(11,42,111,.2)}
+  </style>
+</head>
+<body>
+<div class="adm"><aside><a class="brand" href="/" style="padding:10px 12px;margin:4px 0 14px;background:#fff;border-radius:14px;display:flex;flex-direction:column;align-items:center;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.25)"><img src="/logo.png" width="160" height="33" alt="UKA & British Council" style="height:33px;max-width:160px;object-fit:contain;display:block"><small style="font:800 10px 'Plus Jakarta Sans';color:var(--navy);letter-spacing:.12em;text-transform:uppercase;margin-top:4px">Admin Portal</small></a><nav><a href="/admin/dashboard" class="">Dashboard</a><a href="/admin/courses" class="">Courses</a><a href="/admin/admissions" class="">Admissions</a><a href="/admin/exam-dates" class="">Exam Dates</a><a href="/admin/messages" class="">Messages</a><a href="/admin/site-content-admin" class="on">Site Content & Photos</a><a href="/admin/students" class="">Students</a><a href="/admin/settings" class="">Settings</a></nav><div class="who"><span id="admWhoName">Admin</span><small id="admWhoRole">admin</small><button data-lo>Logout</button></div></aside><main><header><h1>Site Content & SEO Blog Manager</h1></header><section id="c"></section></main></div><div id="toast"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/admin.js"></script>
+<script>
+(async () => {
+  const u = await adminInit('site-content-admin', 'Site Content & SEO Blog Manager', true);
+  if (!u) return;
+  const c = document.getElementById('c');
+
+  const TABS = {
+    site_photos: {
+      n: 'Core Site Photos (Hero, Banners & Achievers)',
+      isSlots: true
+    },
+    news: {
+      n: '100% SEO Blog & News',
+      one: 'Article',
+      t: 'Article Headline',
+      s: 'Subheading / Excerpt',
+      d: 'Full Article Content (Markdown / HTML supported)',
+      isBlog: true,
+      img: 1
+    },
+    exam_center: {
+      n: 'Official Exam Center Photos',
+      one: 'Center Photo',
+      t: 'Photo Title (e.g. Computer-Delivered Lab)',
+      s: 'Facility / Room Caption (e.g. Dell Core-i5 PCs, Soundproof Partition)',
+      d: 'Extended Facility Description (Optional)',
+      x: [
+        ['category', 'Facility Area (e.g. Lab, Acoustic Booth, Waiting Lounge, Biometric Desk)']
+      ],
+      img: 1
+    },
+    team: {
+      n: 'Our Team (Faculty, Advisors, Staff)',
+      one: 'Team Member',
+      t: 'Full Name',
+      s: 'Designation & Credentials (e.g. Head of IELTS, Band 8.5 Master Trainer)',
+      d: 'Bio, Achievements & Background',
+      x: [
+        ['department', 'Department (Faculty / Management / Student Advisor / Technical Support)'],
+        ['skills', 'Specialization (e.g. IELTS Writing 8.0+, Spoken English, Visa Prep)'],
+        ['email', 'Public Contact Email / WhatsApp']
+      ],
+      img: 1
+    },
+    gallery: {
+      n: 'Photo Gallery',
+      one: 'Gallery Photo',
+      t: 'Photo Title',
+      s: 'Caption / Subtitle',
+      d: 'Description',
+      x: [['category', 'Category (campus / events / student celebration)']],
+      img: 1
+    },
+    branch: {
+      n: 'Campuses & Branches',
+      one: 'Branch',
+      t: 'Branch Name',
+      s: 'Area / Campus Type',
+      d: 'Short Description',
+      x: [['address', 'Address'], ['phone', 'Phone Number'], ['hours', 'Visiting Hours'], ['map', 'Google Maps URL']],
+      img: 1
+    },
+    job: {
+      n: 'Career Openings',
+      one: 'Job Opening',
+      t: 'Job Title',
+      s: 'Position Type / Department (e.g. Full-time, IELTS Faculty)',
+      d: 'Job Responsibilities & Qualifications',
+      x: [['deadline', 'Application Deadline'], ['salary', 'Salary / Compensation'], ['apply', 'Apply Email / WhatsApp Link']],
+      img: 0
+    },
+    faq: {
+      n: 'FAQ Database',
+      one: 'FAQ Item',
+      t: 'Question',
+      s: '',
+      d: 'Comprehensive Answer',
+      x: [['category', 'Category (IELTS Exam / Mock Tests / Admission / General)']],
+      img: 0
+    }
+  };
+
+  let tab = new URLSearchParams(location.search).get('tab') || 'site_photos';
+  if (!TABS[tab]) tab = 'site_photos';
+  let items = [], slotMap = {}, curSlot = null, editing = null;
+
+  const G = (n, t, k, p, l) => Array.from({ length: n }, (_, i) => [k + (l ? i : i + 1), t + ' ' + (i + 1), p]);
+  const SLOT_GROUPS = [
+    [
+      'Home Page Main Banners & "Learn. Practise. Succeed" Journey',
+      [
+        ['hero', 'Hero Main Background Photo', 'Appears on: index.html (Top of Homepage)'],
+        ['expand', 'Big Zoom Banner Photo', 'Appears on: index.html (Why UKA Zoom Section)'],
+        ['scene0', 'Story Step 1: Learn Photo', 'Appears on: index.html (Learn. Practise. Succeed Section)'],
+        ['scene1', 'Story Step 2: Practise Photo', 'Appears on: index.html (Learn. Practise. Succeed Section)'],
+        ['scene2', 'Story Step 3: Succeed Photo', 'Appears on: index.html (Learn. Practise. Succeed Section)']
+      ]
+    ],
+    [
+      'Official Computer Exam Lab & Mock Test Showcase',
+      G(5, 'Lab Facility Photo', 'lab', 'Appears on: index.html, ielts-exam.html & mock-test.html')
+    ],
+    [
+      'Course Card Banners (Default fallbacks if course has no custom image)',
+      G(6, 'Course Banner Card', 'course', 'Appears on: courses.html & index.html', 1)
+    ],
+    [
+      'Band 8.5+ Student Achievers (Wall of Fame)',
+      G(8, 'Achiever Portrait', 'ach', 'Appears on: index.html & our-story.html', 1)
+    ]
+  ];
+
+  c.innerHTML = `
+    <div class="subtabs" id="tabs"></div>
+    <div class="tb" style="margin-bottom:16px">
+      <div>
+        <h2 style="font-size:22px;color:var(--navy);margin:0" id="ttl"></h2>
+        <small style="color:var(--mut)" id="subttl"></small>
+      </div>
+      <button class="b red" id="ad" style="margin-left:auto;font-size:14px;padding:10px 20px"></button>
+    </div>
+
+    <!-- Normal Data Table -->
+    <div class="box" id="tableBox">
+      <table>
+        <thead>
+          <tr>
+            <th>Item / Title</th>
+            <th>Details & Meta</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tb"></tbody>
+      </table>
+    </div>
+
+    <!-- Core Site Photos Grid -->
+    <div id="slotsBox" style="display:none"></div>
+    <input type="file" id="slotFileInput" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+
+    <!-- Centered Modal Dialog for Articles/Items -->
+    <dialog id="dg">
+      <div class="dialog-head">
+        <div>
+          <h2 id="dt" style="font-size:22px;color:var(--navy);margin:0"></h2>
+          <small id="dsub" style="color:var(--mut);font-size:12.5px;display:block;margin-top:2px"></small>
+        </div>
+        <button type="button" class="dialog-close-btn" id="closeBtn" title="Close window">×</button>
+      </div>
+      <form id="fm"></form>
+    </dialog>
+
+    <!-- Centered Modal Dialog for Slot Direct URL -->
+    <dialog id="slotUrlDg">
+      <div class="dialog-head">
+        <div>
+          <h2 id="slotUrlTitle" style="font-size:20px;color:var(--navy);margin:0">Set Photo by Direct URL</h2>
+          <small id="slotUrlSub" style="color:var(--mut);font-size:12.5px;display:block;margin-top:2px"></small>
+        </div>
+        <button type="button" class="dialog-close-btn" id="closeSlotUrlBtn" title="Close window">×</button>
+      </div>
+      <form id="slotUrlFm" style="padding-top:10px">
+        <label class="f">Direct Image URL (e.g. https://... or /uploads/...)
+          <input id="slotUrlInp" required placeholder="https://images.unsplash.com/... or /uploads/photo.jpg">
+        </label>
+        <div class="tb" style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+          <button class="b red" type="submit">Save Photo URL</button>
+          <button type="button" class="b" id="cancelSlotUrlBtn">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+  `;
+
+  const $ = id => document.getElementById(id),
+    dg = $('dg'),
+    fm = $('fm'),
+    slotUrlDg = $('slotUrlDg'),
+    slotUrlFm = $('slotUrlFm'),
+    slotFileInput = $('slotFileInput'),
+    tableBox = $('tableBox'),
+    slotsBox = $('slotsBox');
+
+  $('closeBtn').onclick = () => dg.close();
+  $('closeSlotUrlBtn').onclick = () => slotUrlDg.close();
+  $('cancelSlotUrlBtn').onclick = () => slotUrlDg.close();
+
+  const call = async (url, opt = {}) => {
+    const r = await fetch(url, { credentials: 'same-origin', ...opt });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.message || d.error || 'Failed');
+    return d;
+  };
+
+  $('tabs').innerHTML = Object.entries(TABS).map(([k, v]) =>
+    `<button class="${k === tab ? 'active' : ''}" data-t="${k}">${v.n}</button>`
+  ).join('');
+
+  const drawSlots = () => {
+    slotsBox.innerHTML = `
+      <div style="background:#f8faff;border:1.5px solid #dce4f2;border-radius:16px;padding:16px 20px;margin-bottom:24px">
+        <b style="color:var(--navy);font-size:15px">Instant Live Updates:</b>
+        <p style="color:var(--mut);font-size:13px;margin:4px 0 0">
+          Upload any file or set an image link. Every slot shows exactly which public page it appears on. Changes reflect immediately across the entire website.
+        </p>
+      </div>
+      ` + SLOT_GROUPS.map(([groupName, slots]) => `
+        <div style="margin-bottom:34px">
+          <h3 style="font-size:17px;color:var(--navy);margin:0 0 14px;display:flex;align-items:center;gap:8px">
+            <span style="display:inline-block;width:4px;height:18px;background:var(--red);border-radius:2px"></span>
+            ${esc(groupName)}
+          </h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px">
+            ${slots.map(([k, label, pageBadge]) => {
+              const it = slotMap[k];
+              return `
+                <div class="box" style="padding:14px;border-radius:18px;display:flex;flex-direction:column;justify-content:space-between">
+                  <div>
+                    <div style="aspect-ratio:16/10;background:#e9eef7;border-radius:12px;overflow:hidden;display:grid;place-items:center;color:#6b7893;font-size:12px;margin-bottom:10px;border:1px solid #dce4f2">
+                      ${it && it.image ? `<img src="${esc(it.image)}" alt="" style="width:100%;height:100%;object-fit:cover">` : '<span style="color:#94a3b8">No photo set</span>'}
+                    </div>
+                    <div style="font-weight:700;font-size:14px;color:var(--navy);line-height:1.3">${esc(label)}</div>
+                    <div style="margin:6px 0 10px">
+                      <span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700;background:#e0e7ff;color:#3730a3">
+                        ${esc(pageBadge)}
+                      </span>
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:8px;border-top:1px solid #f1f5f9">
+                    <button class="b" data-sk="${k}" style="padding:6px 12px;font-size:12px">Upload</button>
+                    <button class="b" data-su="${k}" style="padding:6px 12px;font-size:12px">URL</button>
+                    ${it && it.image ? `<button class="b del" data-sx="${k}" style="padding:6px 10px;font-size:12px">Remove</button>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+  };
+
+  const drawTable = () => {
+    const T = TABS[tab];
+    $('tb').innerHTML = items.map(it => {
+      const x = it.extra || {};
+      let metaDetails = [];
+      if (T.isBlog) {
+        if (x.slug) metaDetails.push(`Slug: /${x.slug}`);
+        if (x.category) metaDetails.push(x.category);
+        if (x.metaTitle) metaDetails.push(`SEO: "${x.metaTitle}"`);
+      } else {
+        if (it.subtitle) metaDetails.push(it.subtitle);
+        if (T.x) T.x.forEach(([k]) => { if (x[k]) metaDetails.push(x[k]); });
+      }
+
+      return `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:12px">
+              ${it.image ? `<img src="${esc(it.image)}" alt="" style="width:58px;height:42px;object-fit:cover;border-radius:8px;border:1px solid #dce4f2">` : ''}
+              <div>
+                <b>${esc(it.title)}</b>
+                ${T.isBlog && x.slug ? `<div><a href="/news?slug=${encodeURIComponent(x.slug)}" target="_blank" style="font-size:12px;color:var(--blue)">View Live →</a></div>` : ''}
+              </div>
+            </div>
+          </td>
+          <td><small style="color:#475569;line-height:1.5">${esc(metaDetails.join(' · ') || '—')}</small></td>
+          <td><span class="tag ${it.active ? 'on' : 'off'}">${it.active ? 'Published' : 'Draft'}</span></td>
+          <td>
+            <button class="b" data-e="${it._id}">Edit</button>
+            <button class="b del" data-d="${it._id}">Delete</button>
+          </td>
+        </tr>
+      `;
+    }).join('') || '<tr><td colspan="4" style="text-align:center;padding:36px;color:var(--mut)">No items found under this tab. Click "+ Add" above to create one.</td></tr>';
+  };
+
+  const load = async () => {
+    const T = TABS[tab];
+    document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.t === tab));
+    $('ttl').textContent = T.n;
+
+    if (T.isSlots) {
+      $('subttl').textContent = 'Manage homepage banners, interactive story scenes, exam lab photos, and achievers. Every item indicates its exact page.';
+      $('ad').style.display = 'none';
+      tableBox.style.display = 'none';
+      slotsBox.style.display = 'block';
+      try {
+        const d = await call('/api/content/slot/all');
+        slotMap = {};
+        if (Array.isArray(d)) d.forEach(i => slotMap[i.key] = i);
+        drawSlots();
+      } catch (e) {
+        toast(e.message, 1);
+      }
+      return;
+    }
+
+    $('ad').style.display = 'inline-block';
+    tableBox.style.display = 'block';
+    slotsBox.style.display = 'none';
+    $('subttl').textContent = T.isBlog ? 'Manage SEO-optimized blogs, articles, and exam announcements.' :
+      (tab === 'exam_center' ? 'Official venue & lab photos displayed on IELTS Exam Dates page.' :
+      (tab === 'team' ? 'Institutional faculty, student advisors, and leadership members.' : 'Dynamic website content.'));
+    $('ad').textContent = '+ Add ' + T.one;
+
+    try {
+      items = await call('/api/content/' + tab + '/all');
+      drawTable();
+    } catch (e) {
+      toast(e.message, 1);
+    }
+  };
+
+  const slugify = s => s.toLowerCase().trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const open = it => {
+    editing = it;
+    const T = TABS[tab], x = (it && it.extra) || {};
+    $('dt').textContent = (it ? 'Edit ' : 'Create ') + T.one;
+
+    let seoFields = '';
+    if (T.isBlog) {
+      const slugVal = x.slug || (it ? slugify(it.title) : '');
+      const metaTitleVal = x.metaTitle || (it ? it.title : '');
+      const metaDescVal = x.metaDescription || (it ? (it.subtitle || '') : '');
+      const keywordsVal = x.keywords || 'IELTS, British Council, Exam Center, UKA Banasree';
+      const catVal = x.category || 'IELTS Preparation';
+      const authorVal = x.author || 'UKA Academic Team';
+      const readVal = x.readTime || '4 min read';
+
+      seoFields = `
+        <div style="background:#f4f7fc;border:1.5px solid #dce4f2;border-radius:16px;padding:20px;margin:20px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <b style="color:var(--navy);font-size:15px">100% On-Page SEO Engine</b>
+            <span style="font-size:12px;font-weight:700;background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:12px">Google Ready</span>
+          </div>
+
+          <div class="cols">
+            <label class="f">URL Slug (e.g. how-to-score-band-8)
+              <input name="slug" id="slugInput" required maxlength="120" value="${esc(slugVal)}" placeholder="my-blog-post">
+            </label>
+            <label class="f">Category / Topic
+              <select name="category" data-x="category">
+                <option value="IELTS Preparation" ${catVal==='IELTS Preparation'?'selected':''}>IELTS Preparation</option>
+                <option value="Exam Dates & News" ${catVal==='Exam Dates & News'?'selected':''}>Exam Dates & News</option>
+                <option value="British Council Updates" ${catVal==='British Council Updates'?'selected':''}>British Council Updates</option>
+                <option value="Spoken & Grammar" ${catVal==='Spoken & Grammar'?'selected':''}>Spoken & Grammar</option>
+                <option value="Study Abroad & Visas" ${catVal==='Study Abroad & Visas'?'selected':''}>Study Abroad & Visas</option>
+                <option value="Success Stories" ${catVal==='Success Stories'?'selected':''}>Success Stories</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="cols">
+            <label class="f">Author
+              <input data-x="author" value="${esc(authorVal)}">
+            </label>
+            <label class="f">Estimated Read Time
+              <input data-x="readTime" value="${esc(readVal)}">
+            </label>
+          </div>
+
+          <label class="f">
+            Meta Title (Search Engine Title)
+            <span class="char-cnt" id="metaTitleCnt">${metaTitleVal.length}/60</span>
+            <input name="metaTitle" id="metaTitleInput" data-x="metaTitle" maxlength="70" value="${esc(metaTitleVal)}" placeholder="E.g. Computer-Delivered IELTS in Banasree Dhaka | UKA">
+          </label>
+
+          <label class="f">
+            Meta Description (Search Snippet)
+            <span class="char-cnt" id="metaDescCnt">${metaDescVal.length}/160</span>
+            <textarea name="metaDescription" id="metaDescInput" data-x="metaDescription" rows="2" maxlength="170" placeholder="E.g. Book official British Council IELTS on computer at UKA Technical Institute Banasree...">${esc(metaDescVal)}</textarea>
+          </label>
+
+          <label class="f">
+            Focus Keywords / Meta Tags (Comma-separated)
+            <input data-x="keywords" value="${esc(keywordsVal)}" placeholder="IELTS Banasree, British Council test, computer based exam">
+          </label>
+
+          <!-- Live Google Search Preview -->
+          <div style="margin-top:14px">
+            <small style="font-weight:700;color:#64748b;text-transform:uppercase;font-size:11px">Live Google Search Preview</small>
+            <div class="seo-preview">
+              <div class="seo-preview-url">
+                <span>https://ukatechnical.com</span> › news › <span id="prevSlug">${esc(slugVal || 'article-slug')}</span>
+              </div>
+              <div class="seo-preview-title" id="prevTitle">${esc(metaTitleVal || 'Article Title Will Appear Here')}</div>
+              <div class="seo-preview-desc" id="prevDesc">${esc(metaDescVal || 'Meta description search snippet will display here to attract search clicks.')}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    let extraFields = '';
+    if (T.x && T.x.length) {
+      extraFields = `<div class="cols">${T.x.map(([k, l]) => `<label class="f">${l}<input data-x="${k}" value="${esc(x[k] || '')}"></label>`).join('')}</div>`;
+    }
+
+    // Image Input: Dual Upload OR Image URL
+    let imageSection = '';
+    if (T.img) {
+      const curImg = it && it.image ? it.image : '';
+      imageSection = `
+        <div style="background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:18px;margin:16px 0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b style="color:var(--navy);font-size:14px">Featured Photo / Image</b>
+            <div class="img-mode-toggle" id="imgToggle">
+              <button type="button" class="active" data-mode="url">Image URL</button>
+              <button type="button" data-mode="upload">File Upload</button>
+            </div>
+          </div>
+
+          <div id="urlBox">
+            <label class="f" style="margin-bottom:6px">Paste Direct Image URL
+              <input type="url" name="imageUrl" id="imageUrlInput" placeholder="https://images.unsplash.com/... or /uploads/..." value="${esc(curImg)}">
+            </label>
+            <small style="color:var(--mut)">Paste any valid image link from the web, Unsplash, or your cloud storage.</small>
+          </div>
+
+          <div id="uploadBox" style="display:none">
+            <label class="f" style="margin-bottom:6px">Select Photo from Computer / Phone
+              <input type="file" name="photo" id="photoFileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml">
+            </label>
+            <small style="color:var(--mut)">Directly uploads to the institute server (max 10MB, auto-compressed).</small>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;margin-top:12px">
+            <div class="img-preview-box" id="imgPrevBox">
+              ${curImg ? `<img src="${esc(curImg)}" alt="Preview" id="imgPrevTag">` : '<span style="font-size:12px;color:var(--mut)">No Image</span>'}
+            </div>
+            <div style="font-size:12px;color:var(--mut)">
+              <b>Preview</b><br>
+              Recommended: 1200 x 630 px for SEO / Social shares.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    fm.innerHTML = `
+      <label class="f">${T.t}
+        <input name="title" id="titleInput" required maxlength="200" value="${esc(it ? it.title : '')}" placeholder="Enter title...">
+      </label>
+      ${T.s ? `<label class="f">${T.s}<input name="subtitle" id="subtitleInput" maxlength="250" value="${esc(it ? it.subtitle : '')}" placeholder="Short summary or subtitle"></label>` : ''}
+      <label class="f">${T.d}
+        <textarea name="description" rows="${T.isBlog ? 10 : 4}" placeholder="Enter details or write your article content...">${esc(it ? it.description : '')}</textarea>
+      </label>
+
+      ${seoFields}
+      ${extraFields}
+      ${imageSection}
+
+      <div class="cols">
+        <label class="f">Display Order (Lower number comes first)
+          <input name="order" type="number" value="${it ? it.order || 0 : 0}">
+        </label>
+        <label class="f" style="display:flex;align-items:center;gap:10px;margin-top:24px">
+          <input type="checkbox" name="active" ${!it || it.active ? 'checked' : ''} style="width:20px;height:20px">
+          <b>Show Live / Published</b>
+        </label>
+      </div>
+
+      <div class="tb" style="margin-top:24px;border-top:1px solid var(--line);padding-top:18px">
+        <button class="b red" id="sv" style="font-size:15px;padding:12px 28px">Save & Publish</button>
+        <button type="button" class="b" id="cn">Cancel</button>
+      </div>
+    `;
+
+    // Interactive SEO and Image listeners
+    if (T.isBlog) {
+      const titleIn = $('titleInput');
+      const slugIn = $('slugInput');
+      const metaTitleIn = $('metaTitleInput');
+      const metaDescIn = $('metaDescInput');
+      const prevTitle = $('prevTitle');
+      const prevDesc = $('prevDesc');
+      const prevSlug = $('prevSlug');
+      const metaTitleCnt = $('metaTitleCnt');
+      const metaDescCnt = $('metaDescCnt');
+
+      titleIn.addEventListener('input', () => {
+        if (!editing && !slugIn.dataset.edited) {
+          slugIn.value = slugify(titleIn.value);
+          prevSlug.textContent = slugIn.value || 'article-slug';
+        }
+        if (!metaTitleIn.dataset.edited) {
+          metaTitleIn.value = titleIn.value;
+          prevTitle.textContent = titleIn.value || 'Article Title';
+          metaTitleCnt.textContent = `${metaTitleIn.value.length}/60`;
+        }
+      });
+
+      slugIn.addEventListener('input', () => {
+        slugIn.dataset.edited = '1';
+        slugIn.value = slugify(slugIn.value);
+        prevSlug.textContent = slugIn.value || 'article-slug';
+      });
+
+      metaTitleIn.addEventListener('input', () => {
+        metaTitleIn.dataset.edited = '1';
+        prevTitle.textContent = metaTitleIn.value || 'Article Title';
+        metaTitleCnt.textContent = `${metaTitleIn.value.length}/60`;
+        metaTitleCnt.className = 'char-cnt ' + (metaTitleIn.value.length > 60 ? 'warn' : 'good');
+      });
+
+      metaDescIn.addEventListener('input', () => {
+        prevDesc.textContent = metaDescIn.value || 'Snippet text...';
+        metaDescCnt.textContent = `${metaDescIn.value.length}/160`;
+        metaDescCnt.className = 'char-cnt ' + (metaDescIn.value.length > 160 ? 'warn' : 'good');
+      });
+    }
+
+    if (T.img) {
+      const imgToggle = $('imgToggle');
+      const urlBox = $('urlBox');
+      const uploadBox = $('uploadBox');
+      const urlInput = $('imageUrlInput');
+      const fileInput = $('photoFileInput');
+      const prevBox = $('imgPrevBox');
+
+      imgToggle.addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        imgToggle.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (btn.dataset.mode === 'upload') {
+          urlBox.style.display = 'none';
+          uploadBox.style.display = 'block';
+        } else {
+          urlBox.style.display = 'block';
+          uploadBox.style.display = 'none';
+        }
+      });
+
+      urlInput.addEventListener('input', () => {
+        const val = urlInput.value.trim();
+        if (val) {
+          prevBox.innerHTML = `<img src="${esc(val)}" alt="Preview" onerror="this.src='';this.alt='Invalid Image URL'">`;
+        } else {
+          prevBox.innerHTML = '<span style="font-size:12px;color:var(--mut)">No Image</span>';
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = ev => {
+            prevBox.innerHTML = `<img src="${ev.target.result}" alt="Preview">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    $('cn').onclick = () => dg.close();
+    dg.showModal();
+  };
+
+  c.onclick = async e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.t) {
+      tab = b.dataset.t;
+      history.replaceState(null, '', `?tab=${tab}`);
+      return load();
+    }
+    // Slot actions
+    if (b.dataset.sk) {
+      curSlot = b.dataset.sk;
+      slotFileInput.value = '';
+      slotFileInput.click();
+      return;
+    }
+    if (b.dataset.su) {
+      curSlot = b.dataset.su;
+      $('slotUrlTitle').textContent = `Set Photo URL (${curSlot})`;
+      $('slotUrlSub').textContent = `Slot: ${curSlot}`;
+      $('slotUrlInp').value = (slotMap[curSlot] && slotMap[curSlot].image) || '';
+      slotUrlDg.showModal();
+      return;
+    }
+    if (b.dataset.sx) {
+      const k = b.dataset.sx;
+      if (!slotMap[k]) return;
+      if (confirm(`Are you sure you want to remove the photo for "${k}"?`)) {
+        try {
+          await call('/api/content/slot/' + slotMap[k]._id, { method: 'DELETE' });
+          toast('Photo removed successfully');
+          load();
+        } catch (er) {
+          toast(er.message, 1);
+        }
+      }
+      return;
+    }
+    // Normal content actions
+    if (b.id === 'ad') return open(null);
+    if (b.dataset.e) return open(items.find(i => i._id === b.dataset.e));
+    if (b.dataset.d && confirm('Are you sure you want to delete this entry?')) {
+      try {
+        await call(`/api/content/${tab}/${b.dataset.d}`, { method: 'DELETE' });
+        toast('Deleted successfully');
+        load();
+      } catch (er) {
+        toast(er.message, 1);
+      }
+    }
+  };
+
+  slotFileInput.onchange = async () => {
+    const f = slotFileInput.files[0];
+    if (!f || !curSlot) return;
+    const fd = new FormData();
+    fd.append('image', f);
+    fd.append('key', curSlot);
+    fd.append('title', curSlot);
+    const ex = slotMap[curSlot];
+    toast('Uploading photo...');
+    try {
+      await call('/api/content/slot' + (ex ? '/' + ex._id : ''), {
+        method: ex ? 'PUT' : 'POST',
+        body: fd
+      });
+      toast('Photo updated successfully!');
+      load();
+    } catch (err) {
+      toast(err.message, 1);
+    }
+    slotFileInput.value = '';
+  };
+
+  slotUrlFm.onsubmit = async e => {
+    e.preventDefault();
+    const urlVal = $('slotUrlInp').value.trim();
+    if (!urlVal || !curSlot) return;
+    const ex = slotMap[curSlot];
+    toast('Saving photo URL...');
+    try {
+      await call('/api/content/slot' + (ex ? '/' + ex._id : ''), {
+        method: ex ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: curSlot, title: curSlot, image: urlVal })
+      });
+      slotUrlDg.close();
+      toast('Photo updated successfully!');
+      load();
+    } catch (err) {
+      toast(err.message, 1);
+    }
+  };
+
+  fm.onsubmit = async e => {
+    e.preventDefault();
+    const E = fm.elements, fd = new FormData();
+    fd.append('title', E.title.value.trim());
+    if (E.subtitle) fd.append('subtitle', E.subtitle.value.trim());
+    fd.append('description', E.description.value.trim());
+
+    const x = { ...(editing && editing.extra || {}) };
+    if (E.slug) x.slug = E.slug.value.trim();
+    if (E.metaTitle) x.metaTitle = E.metaTitle.value.trim();
+    if (E.metaDescription) x.metaDescription = E.metaDescription.value.trim();
+
+    fm.querySelectorAll('[data-x]').forEach(i => x[i.dataset.x] = i.value.trim());
+    fd.append('extra', JSON.stringify(x));
+
+    fd.append('order', E.order.value || 0);
+    fd.append('active', E.active.checked);
+
+    // Dual photo handling: direct file upload takes priority; otherwise image URL
+    if (E.photo && E.photo.files && E.photo.files[0]) {
+      fd.append('image', E.photo.files[0]);
+    } else if (E.imageUrl && E.imageUrl.value.trim()) {
+      fd.append('imageUrl', E.imageUrl.value.trim());
+    }
+
+    $('sv').disabled = true;
+    $('sv').textContent = 'Saving & Publishing...';
+    try {
+      await call(editing ? `/api/content/${tab}/${editing._id}` : `/api/content/${tab}`, {
+        method: editing ? 'PUT' : 'POST',
+        body: fd
+      });
+      dg.close();
+      toast('Saved successfully!');
+      load();
+    } catch (er) {
+      toast(er.message, 1);
+    }
+    $('sv').disabled = false;
+    $('sv').textContent = 'Save & Publish';
+  };
+
+  load();
+})();
+</script>
+</body>
+</html>

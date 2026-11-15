@@ -102,12 +102,64 @@
   }
 
   const menu = document.getElementById('menu');
-
   const bgb = document.getElementById('bg'), ov = document.getElementById('ov');
-  function setMenu(o) { menu.classList.toggle('open', o); bgb.classList.toggle('x', o); ov.classList.toggle('on', o); document.body.classList.toggle('lock', o); bgb.setAttribute('aria-expanded', o); if (!o) menu.querySelectorAll('.has.show').forEach(x => x.classList.remove('show')); }
-  bgb.onclick = () => setMenu(!menu.classList.contains('open')); ov.onclick = () => setMenu(false);
-  menu.addEventListener('click', e => { const a = e.target.closest('a,.mx'); if (!a) return; if (a.matches('.has>a')) { if (innerWidth <= 980) { e.preventDefault(); const li = a.parentNode, was = li.classList.contains('show'); menu.querySelectorAll('.has.show').forEach(x => x.classList.remove('show')); li.classList.toggle('show', !was); } return; } setMenu(false); });
-  addEventListener('keydown', e => e.key == 'Escape' && setMenu(false)); addEventListener('resize', () => innerWidth > 980 && setMenu(false));
+
+  function setMenu(o) {
+    if (!menu) return;
+    menu.classList.toggle('open', o);
+    if (bgb) {
+      bgb.classList.toggle('x', o);
+      bgb.setAttribute('aria-expanded', o);
+    }
+    if (ov) {
+      ov.classList.toggle('on', o);
+    }
+    document.body.classList.toggle('lock', o);
+    if (!o) menu.querySelectorAll('.has.show').forEach(x => x.classList.remove('show'));
+  }
+
+  if (bgb) {
+    bgb.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      setMenu(!menu.classList.contains('open'));
+    });
+  }
+
+  if (ov) {
+    ov.addEventListener('click', e => {
+      e.preventDefault();
+      setMenu(false);
+    });
+  }
+
+  if (menu) {
+    menu.addEventListener('click', e => {
+      const a = e.target.closest('a,.mx');
+      if (!a) return;
+      if (a.classList.contains('mx')) {
+        e.preventDefault();
+        setMenu(false);
+        return;
+      }
+      if (a.matches('.has > a')) {
+        if (window.innerWidth <= 980) {
+          e.preventDefault();
+          e.stopPropagation();
+          const li = a.parentNode;
+          const was = li.classList.contains('show');
+          menu.querySelectorAll('.has.show').forEach(x => x.classList.remove('show'));
+          li.classList.toggle('show', !was);
+        }
+        return;
+      }
+      // If clicking a destination navigation link, close drawer
+      setMenu(false);
+    });
+  }
+
+  addEventListener('keydown', e => e.key === 'Escape' && setMenu(false));
+  addEventListener('resize', () => window.innerWidth > 980 && setMenu(false));
 
   // Dynamic Injection of AI Voice Calling Agent Styles & Script
   if (!document.getElementById('ukaCallAgentCss')) {
